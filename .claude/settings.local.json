@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npm create:*)",
+      "Bash(copy scenario-david-squiller.json public)",
+      "Bash(if not exist public mkdir public)",
+      "Bash(copy /Y:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node -e:*)",
+      "Bash(node run.js:*)",
+      "Bash(node:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

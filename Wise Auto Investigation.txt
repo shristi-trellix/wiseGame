@@ -1,0 +1,532 @@
+MeetTrellix Wise
+The Trellix AI-Powered SecOps Analyst 
+Agentic
+data lake
+investigations
+Continuously Learns from Your Actions
+ProprietaryThreatIntelligence
+Auto-triagesand PrioritizesAlerts
+Purpose-built AI forSecOps
+ContextualUnderstandingof Threats
+Automated ComplianceReporting
+Cloud, Endpoint, Email, DLP Network
+No alert left behind
+100% automated SOC investigations and workflow
+References
+
+Anthropic.com/customers/trellix
+
+Harvard Business Review
+https://hbr.org/sponsored/2025/06/addressing-alert-fatigue-in-cybersecurity-through-generative-ai 
+1
+1
+
+Agentic Flows
+WISE Asks and Answers its Own Questions
+Wise
+Trellix EDR
+What happened on this endpoint?
+Is this file malicious or sensitive?
+Were there failed attempts before the password reset?
+Does the user have an executive assistant?
+What did it do on the network?
+What level of access does this user have?
+Is this user currently traveling?
+Trellix NDR
+Trellix IVX
+Global calendar with out-of-office listings
+Data lake with auth/activity logs
+Org chart via directory
+IAM policies
+What did they do after they reset the password?
+Questions
+Agents
+2
+New slide
+2
+
+Get some answers to specific questions (human time saved): 
+Is this user currently traveling? (3m) 
+Were there failed attempts before the password reset? (1m)
+Does the user have an executive assistant? (1m)
+What level of access does this user have? (3m)
+What did they do after they reset the password? (5m)
+Generative AI performs 13 minutes of work in under 45 seconds.
+3
+Generative AI Solution: 
+1
+2
+4
+3
+1
+2
+4
+3
+5
+5
+3
+3
+
+What Happened?
+Situational Awareness: Analyzes security telemetry (EDR, Network, DNS) to build a complete timeline and extract IOCs
+Wise’s confidence comes from your engagement
+Who is Affected?
+Business Context: Identifies user/asset criticality and VIP status based on your uploaded inventory
+Who Is Affected?
+Is it Expected?
+Behavioral Baseline: Compares activity against your specific business hours, authorized tools, and geographic policies
+Is It Expected?
+What to Do?
+SOP Alignment: Ensures investigation & remediation steps align with your org’s predefined SOP boundaries
+What To Do?
+How Confident is Your AI?
+Seen Before?
+Historical Context: Matches patterns against similar alerts and previous verdicts within the last 30 days
+Seen Before?
+What Happened?
+4
+Instead of hard nums, use pie chart
+4
+
+EDR
+PowerShell execution on SRV-FIN-01 by user adm-jdoe. Base64 string detected.
+Network Logs
+Inbound connection to SRV-FIN-01 from external IP 192.168.1.50."
+Onboarding, 09:00 AM
+Set Wise Up for Success on Day 1
+Wise: “I see a suspicious script on a server, but I am operating in a vacuum. Is adm-jdoe a human or a service? Is this server a test box or the crown jewels? Without your engagement, I have to treat this as a generic high-risk event, but my certainty is low."
+Confidence
+VIP List
+Waiting for user input…
+Critical Assets
+Waiting for user input…
+Authorized Tools
+Waiting for user input…
+
+Operational Timezones
+Waiting for user input…
+
+Geographic Policy
+Waiting for user input…
+Response SOPs
+Waiting for user input…
+
+What Happened?
+5
+
+EDR
+PowerShell execution on SRV-FIN-01 by user adm-jdoe. Base64 string detected.
+Network Logs
+Inbound connection to SRV-FIN-01 from external IP 192.168.1.50."
+Onboarding, 11:00 AM
+Set Wise Up for Success on Day 1
+
+Wise: “Your input made the stakes clear. This isn't just a random script; it's a high-privilege account on the most sensitive data store in the company. This information allows me to prioritize this over 1,000 other alerts.”
+Confidence
+VIP List
+Input: “adm-jdoe is a Domain Admin and a VIP user.”
+Critical Assets
+Input:“SRV-FIN-01 is the primary Finance Database.”
+Who is Affected?
+Authorized Tools
+Waiting for user input…
+
+Operational Timezones
+Waiting for user input…
+
+Geographic Policy
+Waiting for user input…
+Response SOPs
+Waiting for user input…
+
+6
+
+EDR
+PowerShell execution on SRV-FIN-01 by user adm-jdoe. Base64 string detected.
+Network Logs
+Inbound connection to SRV-FIN-01 from external IP 192.168.1.50."
+Onboarding, 02:00 PM
+Set Wise Up for Success on Day 1
+Wise: “Thanks for more context! This login is from an authorized remote region, but it's occurring at 3 AM, outside of the Finance department's profile. However, because adm-jdoe is IT, this might be a scheduled maintenance script. I am moving from guessing to calculating probability.”
+Confidence
+VIP List
+Input: “adm-jdoe is a Domain Admin and a VIP user.”
+Critical Assets
+Input:“SRV-FIN-01 is the primary Finance Database.”
+Authorized Tools
+Input: “PowerShell is an authorized tool for IT team.”
+Operational Timezones
+Input: “SOC operates in EST. Finance activity is only expected 8AM–6PM.”
+Geographic Policy
+Input: “External logins are expected behavior for our global workforce.”
+Response SOPs
+Waiting for user input…
+
+Is it Expected? 
+7
+
+EDR
+PowerShell execution on SRV-FIN-01 by user adm-jdoe. Base64 string detected.
+Network Logs
+Inbound connection to SRV-FIN-01 from external IP 192.168.1.50."
+Onboarding, 02:00 PM
+Set Wise Up for Success on Day 1
+Wise: “Since you shared your policy, I’ve cross-referenced this activity with your Change Management API and confirmed a scheduled backup. I will now generate a report explaining why this is authorized, ensuring I don't disrupt your Finance Database with an unnecessary auto-isolation. My assessment is now fully context-aware.”
+Confidence
+VIP List
+Input: “adm-jdoe is a Domain Admin and a VIP user.”
+Critical Assets
+Input:“SRV-FIN-01 is the primary Finance Database.”
+Authorized Tools
+Input: “PowerShell is an authorized tool for IT team.”
+Geographic Policy
+Input: “External logins are expected behavior for our global workforce.”
+Response SOPs
+Input: For admin scripts, verify against the Change Management schedule before isolating.
+
+What to Do?
+Operational Timezones
+Input: “SOC operates in EST. Finance activity is only expected 8AM–6PM.”
+8
+
+Wise’s Journey - Scenario 1
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Hyper Automation / Remediation (Jira, Workato, etc)
+Blue = Available, Gray = Unavailable
+Available data sources in environment.
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+9
+9
+
+Wise’s Journey - Scenario 1
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Wise: “The account name administrator is generic and could represent a legitimate admin task or a compromised account. I need to verify the intent behind this data movement.”
+Initial alert analysis for potential sensitive data movement.
+Confidence Score: 50
+Alert triggered: two events detected involving user administrator from IP 10.40.47.168. Severity is Medium/Minor.
+Hyper Automation / Remediation (Jira, Workato, etc)
+10
+10
+
+Wise’s Journey - Scenario 1
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Wise: “Single-user-to-IP mapping strengthens correlation. While HTTPS is standard, I need to see if a concurrent threat exists on the host.”
+Cross-referencing endpoint and network activity for destination context.
+Confidence Score: 65
+Activity linked to hostname ec2amaz-g7sbg37. IP is associated with a single user during this window.
+HTTP traffic identified to external IP 115.230.125.149:443. Port 443 suggests encrypted HTTPS communication.
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+Hyper Automation / Remediation (Jira, Workato, etc)
+11
+11
+
+Wise’s Journey - Scenario 1
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Wise: “The exploit prevention alert is concerning and suggests the endpoint may have executed suspicious code. However, administrators routinely trigger DLP during migrations. I cannot distinguish between routine maintenance (Scenario A) and exfiltration (Scenario B) without more granular data.”
+Evaluating the probability of a concurrent system exploit.
+Confidence Score: 75
+Separate exploit prevention rule triggered for 10.40.47.168. Malware name variable is missing from the log.
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+Hyper Automation / Remediation (Jira, Workato, etc)
+12
+12
+
+Wise’s Journey - Scenario 1
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Wise: “I have reached a confidence ceiling. Without process execution logs or file transfer details, I cannot justify a critical escalation based on speculation. I recommend investigation within normal priority workflows.”
+Escalation not recommended due to critical evidence gaps.
+Confidence Score: 75
+Endpoint Process Execution Logs
+File Transfer Logs
+Gap: I cannot identify what specific files were accessed or moved.
+Gap: I lack the logs to show what application generated the traffic.
+Identity/ Authentication Logs
+Hyper Automation / Remediation (Jira, Workato, etc)
+13
+13
+
+Wise’s Journey - Scenario 2
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Hyper Automation / Remediation (Jira, Workato, etc)
+Available data sources in environment.
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+14
+14
+
+Wise’s Journey - Scenario 2
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Hyper Automation / Remediation (Jira, Workato, etc)
+Wise: “A successful login from a Tor exit node is a high-risk indicator often used to obscure malicious intent. I need to investigate this IP’s historical behavior and determine if this is an isolated incident or part of a broader campaign.”
+Initial identification of a high-risk authenticated session via an anonymization network.
+Confidence Score: 50
+Successful authenticated session for intuser@fetld.com from IP 114.216.106.130 (Tor exit node) in Gunzenhausen, Germany
+Standard remote access logs available; no immediate correlation required for O365 ingress
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+15
+15
+
+Wise’s Journey - Scenario 2
+Trellix DLP SaaS
+Office 365 (Azure AD logs)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Hyper Automation / Remediation (Jira, Workato, etc)
+Wise: “The IP has been extremely active across multiple attack vectors. The sequential logic is clear: a large-scale brute force campaign led directly to this successful login. This is highly unlikely to be legitimate user behavior.”
+WISE uncovers a coordinated credential stuffing and brute force campaign.
+Confidence Score: 75
+Forensic deep dive available, but current priority is assessing global account impact across clouds
+Source IP 114.216.106.130 triggered 304 brute force attempts and 33 password spray events in the last 24 hours
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+16
+16
+
+Wise’s Journey - Scenario 2
+Trellix DLP SaaS
+Office 365 (Inbox Rules)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Hyper Automation / Remediation (Jira, Workato, etc)
+Wise: “The attacker has moved beyond initial access to resource abuse and data exfiltration staging. The creation of 300 EC2 instances is a hallmark of cryptomining or botnet infrastructure. I have confirmed an active multi-cloud compromise.”
+WISE pivots to infrastructure logs to confirm active post-exploitation activity.
+Confidence Score: 95
+Malicious post-compromise activity detected: 300 EC2 instances created/started and S3 bucket ACL permissions modified.
+7 new inbox rules created to forward mail to external addresses
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+17
+17
+
+Wise’s Journey - Scenario 2
+Trellix DLP SaaS
+Office 365 (Inbox Rules)
+McAfee EPO (endpoint logs)
+Network (Bro/Zeek) Logs
+Trellix Endpoint ENS
+IP Reputation / Threat Intelligence
+AWS CloudTrail
+VPN Logs
+SSL / Proxy Inspection Logs
+EDR Forensics (EDRF)
+Hyper Automation / Remediation (Jira, Workato, etc)
+Wise: “The evidence is irrefutable: Brute force → Successful Tor Login → Immediate Malicious Post-Compromise Activity. This is an active incident requiring immediate response to prevent further data exfiltration or resource abuse.”
+WISE pivots to infrastructure logs to confirm active post-exploitation activity.
+Confidence Score: 95
+Infrastructure evidence is conclusive; network inspection not required for primary containment
+Action: Disabling intuser@fetld.com in Active Directory and revoking all Office 365/AWS session tokens
+Endpoint Process Execution Logs
+File Transfer Logs
+Identity/ Authentication Logs
+18
+18
+
+Trellix Wise in Action
+Auto investigating to find the alerts that matter.
+
+Auto Investigation: How good is it?
+What does it look like when Trellix Wise investigates an alert?
+Methodology alerts are not “good” or “bad,” they must be investigated. 
+
+Was this use of Powershell malicious?
+20
+
+Auto Investigation: Who is involved?
+After analyzing the provided information, here is my assessment:
+Explanation:
+1. User profile: David Squiller is a Director in the Sales department, not a support account or super user. His role doesn't typically involve running PowerShell scripts or executing potentially malicious files.
+2. IP profile: No specific IP address is provided for analysis.
+3. Standard tools: The command executed is not a standard tool. It's a PowerShell command that downloads and executes a script from a GitHub repository, which is highly suspicious.
+4. Story in the data: The most plausible story is malicious activity. A file named "19625_cutepuppyjpg.exe" (likely masquerading as an image) executed a command to run PowerShell with bypassed execution policy, downloading and executing a script from GitHub. This is a common technique used by attackers.
+5. Evidence of success: The alert indicates the process was successfully created, suggesting the malicious activity was likely successful in its initial stages.
+6. Importance of target: While David Squiller is not marked as a VIP, he is a Director, which makes him a potentially valuable target for attackers.
+Given these factors, especially the successful execution of a suspicious PowerShell command and the target being a Director, I believe this alert should be escalated to critical severity.
+
+
+Trellix Wise uses the rich context provided by integrations to understand the role of the user.
+21
+
+Auto Investigation: What is normal?
+After analyzing the provided information, here is my assessment:
+Explanation:
+1. User profile: David Squiller is a Director in the Sales department, not a support account or super user. His role doesn't typically involve running PowerShell scripts or executing potentially malicious files.
+2. IP profile: No specific IP address is provided for analysis.
+3. Standard tools: The command executed is not a standard tool. It's a PowerShell command that downloads and executes a script from a GitHub repository, which is highly suspicious.
+4. Story in the data: The most plausible story is malicious activity. A file named "19625_cutepuppyjpg.exe" (likely masquerading as an image) executed a command to run PowerShell with bypassed execution policy, downloading and executing a script from GitHub. This is a common technique used by attackers.
+5. Evidence of success: The alert indicates the process was successfully created, suggesting the malicious activity was likely successful in its initial stages.
+6. Importance of target: While David Squiller is not marked as a VIP, he is a Director, which makes him a potentially valuable target for attackers.
+Given these factors, especially the successful execution of a suspicious PowerShell command and the target being a Director, I believe this alert should be escalated to critical severity.
+
+
+Trellix Wise understands what tools are normal and if they are being used suspiciously.
+22
+
+Auto Investigation: What happened?
+After analyzing the provided information, here is my assessment:
+Explanation:
+1. User profile: David Squiller is a Director in the Sales department, not a support account or super user. His role doesn't typically involve running PowerShell scripts or executing potentially malicious files.
+2. IP profile: No specific IP address is provided for analysis.
+3. Standard tools: The command executed is not a standard tool. It's a PowerShell command that downloads and executes a script from a GitHub repository, which is highly suspicious.
+4. Story in the data: The most plausible story is malicious activity. A file named "19625_cutepuppyjpg.exe" (likely masquerading as an image) executed a command to run PowerShell with bypassed execution policy, downloading and executing a script from GitHub. This is a common technique used by attackers.
+5. Evidence of success: The alert indicates the process was successfully created, suggesting the malicious activity was likely successful in its initial stages.
+6. Importance of target: While David Squiller is not marked as a VIP, he is a Director, which makes him a potentially valuable target for attackers.
+Given these factors, especially the successful execution of a suspicious PowerShell command and the target being a Director, I believe this alert should be escalated to critical severity.
+
+
+Trellix Wise creates a complete story based on all of the evidence.
+23
+
+Auto Investigation: Do we care?
+After analyzing the provided information, here is my assessment:
+Explanation:
+1. User profile: David Squiller is a Director in the Sales department, not a support account or super user. His role doesn't typically involve running PowerShell scripts or executing potentially malicious files.
+2. IP profile: No specific IP address is provided for analysis.
+3. Standard tools: The command executed is not a standard tool. It's a PowerShell command that downloads and executes a script from a GitHub repository, which is highly suspicious.
+4. Story in the data: The most plausible story is malicious activity. A file named "19625_cutepuppyjpg.exe" (likely masquerading as an image) executed a command to run PowerShell with bypassed execution policy, downloading and executing a script from GitHub. This is a common technique used by attackers.
+5. Evidence of success: The alert indicates the process was successfully created, suggesting the malicious activity was likely successful in its initial stages.
+6. Importance of target: While David Squiller is not marked as a VIP, he is a Director, which makes him a potentially valuable target for attackers.
+Given these factors, especially the successful execution of a suspicious PowerShell command and the target being a Director, I believe this alert should be escalated to critical severity.
+
+
+Trellix Wise considers everything and makes a decision.
+24
+
+Deprioritizing Noisy Alerts
+Trellix Wise declines to escalate this alert using a transparent decision making process.
+Trellix Wise is evaluating every alert to ensure it’s not important. 
+
+But this only works if you can audit what it’s doing.
+
+It shows its work, walking you through its decision making process, step by step.
+25
+
+Trellix Wise fully understands the situation
+Decision:
+The alert was likely triggered due to the presence of a long base64 encoded string in the command line arguments of the Nessus Agent. However, this is expected behavior for this security scanning tool. The base64 string contains metadata about the system, including OS version, IP addresses, and Nessus plugin information.
+Other rules that fired (like "powershell methodology [base64 string]" and "windows methodology [base64 char args]") are likely false positives triggered by the legitimate use of base64 encoding by the Nessus Agent.
+Given that this appears to be normal activity from an authorized security tool, and there's no evidence of malicious intent or compromise, raising the severity to critical is not warranted. The current medium severity is appropriate, as it allows for investigation without causing undue alarm.
+It knows why the alert was triggered and what it was looking for.
+26
+
+Trellix Wise fully understands the situation
+Decision:
+The alert was likely triggered due to the presence of a long base64 encoded string in the command line arguments of the Nessus Agent. However, this is expected behavior for this security scanning tool. The base64 string contains metadata about the system, including OS version, IP addresses, and Nessus plugin information.
+Other rules that fired (like "powershell methodology [base64 string]" and "windows methodology [base64 char args]") are likely false positives triggered by the legitimate use of base64 encoding by the Nessus Agent.
+Given that this appears to be normal activity from an authorized security tool, and there's no evidence of malicious intent or compromise, raising the severity to critical is not warranted. The current medium severity is appropriate, as it allows for investigation without causing undue alarm.
+It knows what behavior is expected in an enterprise environment.
+27
+
+Trellix Wise fully understands the situation
+Decision:
+The alert was likely triggered due to the presence of a long base64 encoded string in the command line arguments of the Nessus Agent. However, this is expected behavior for this security scanning tool. The base64 string contains metadata about the system, including OS version, IP addresses, and Nessus plugin information.
+Other rules that fired (like "powershell methodology [base64 string]" and "windows methodology [base64 char args]") are likely false positives triggered by the legitimate use of base64 encoding by the Nessus Agent.
+Given that this appears to be normal activity from an authorized security tool, and there's no evidence of malicious intent or compromise, raising the severity to critical is not warranted. The current medium severity is appropriate, as it allows for investigation without causing undue alarm.
+It automatically decodes the base64 string and uses that in its decision.
+This is the moment where gen AI goes beyond what a human can do:
+       Vuln info from partner Tenable
+28
+
+Trellix Wise fully understands the situation
+Decision:
+The alert was likely triggered due to the presence of a long base64 encoded string in the command line arguments of the Nessus Agent. However, this is expected behavior for this security scanning tool. The base64 string contains metadata about the system, including OS version, IP addresses, and Nessus plugin information.
+Other rules that fired (like "powershell methodology [base64 string]" and "windows methodology [base64 char args]") are likely false positives triggered by the legitimate use of base64 encoding by the Nessus Agent.
+Given that this appears to be normal activity from an authorized security tool, and there's no evidence of malicious intent or compromise, raising the severity to critical is not warranted. The current medium severity is appropriate, as it allows for investigation without causing undue alarm.
+It puts this alert in the context of the other alerts for this host and realizes they are also false positives.
+29
+
+Trellix Wise fully understands the situation
+Decision:
+The alert was likely triggered due to the presence of a long base64 encoded string in the command line arguments of the Nessus Agent. However, this is expected behavior for this security scanning tool. The base64 string contains metadata about the system, including OS version, IP addresses, and Nessus plugin information.
+Other rules that fired (like "powershell methodology [base64 string]" and "windows methodology [base64 char args]") are likely false positives triggered by the legitimate use of base64 encoding by the Nessus Agent.
+Given that this appears to be normal activity from an authorized security tool, and there's no evidence of malicious intent or compromise, raising the severity to critical is not warranted. The current medium severity is appropriate, as it allows for investigation without causing undue alarm.
+It knows what is worth investigating and what is not.
+30

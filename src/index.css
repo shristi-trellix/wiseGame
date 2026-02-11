@@ -1,0 +1,88 @@
+/* Wise Detective - Trellix Brand Theme */
+:root {
+  /* Trellix Brand Colors */
+  --color-background: #1A1A1A;
+  --color-agent-glow: #2814FF;
+  --color-text-primary: #FFFFFF;
+  --color-success: #00CD00;
+  --color-error: #FF4444;
+  --color-warning: #FFA500;
+
+  /* Additional UI Colors */
+  --color-panel-bg: #242424;
+  --color-border: #333333;
+  --color-card-bg: #2A2A2A;
+  --color-card-hover: #303030;
+
+  /* Typography */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 1280px;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Monospace font for code/logs */
+.monospace {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Smooth transitions */
+* {
+  transition: none;
+}
+
+.transition-smooth {
+  transition: all 0.3s ease-out;
+}
+
+.transition-fast {
+  transition: all 0.2s ease-out;
+}
+
+/* Disable text selection during drag operations */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-panel-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444444;
+}

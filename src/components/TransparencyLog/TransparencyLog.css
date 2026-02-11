@@ -1,0 +1,86 @@
+.transparency-log {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.log-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.log-empty-icon {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+
+.log-empty-text {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.log-empty-subtext {
+  font-size: 0.875rem;
+  color: #555;
+  max-width: 250px;
+  line-height: 1.5;
+}
+
+.log-entries {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--color-text-primary);
+}
+
+.log-entry {
+  margin-bottom: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.log-prefix {
+  color: var(--color-agent-glow);
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.log-text {
+  color: #ccc;
+}
+
+/* Typing cursor for streaming text */
+.typing-cursor {
+  color: var(--color-agent-glow);
+  font-weight: bold;
+  animation: cursorBlink 0.8s infinite;
+  margin-left: 2px;
+}
+
+@keyframes cursorBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
