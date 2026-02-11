@@ -2,6 +2,10 @@
 
 An interactive game demonstrating Trellix Wise's agentic flows for security alert triage and investigation.
 
+## 🌐 Play Online
+
+**Live Demo:** Coming soon on Cloudflare Pages
+
 ## 🎮 Game Overview
 
 Deploy specialized Wise Agents (EDR, NDR, Identity, IVX) to investigate the David Squiller security incident. Build confidence through correct agent selection, save analyst time, and demonstrate the power of AI-driven security operations.
