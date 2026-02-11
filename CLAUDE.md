@@ -2,7 +2,8 @@
 
 **Project**: Wise Detective - The Auto-Investigation Challenge
 **Purpose**: Interactive game demonstrating Trellix Wise's agentic flows for security alert triage
-**Status**: Phase 3 Complete ✅ | MVP Achieved 🎉 | Core Features 100% Complete
+**Status**: Deployed & Live ✅ | Public Demo Available 🌐 | Production Ready 🎉
+**Live URL**: https://wisegame.pages.dev/
 **Last Updated**: 2026-02-11
 
 ---
@@ -521,16 +522,120 @@ Enhanced scroll behavior:
 
 ---
 
-## 🎮 Current State - Fully Playable Game!
+## 🎯 Phase 4: SOC Overview & Deployment (COMPLETE ✅)
+
+### **Objectives Achieved**
+1. ✅ Created engaging SOC Overview screen with alert swarm visualization
+2. ✅ Removed redundant intro screen (direct transition to gameplay)
+3. ✅ Added investigation guide with animated arrow
+4. ✅ Deployed game to Cloudflare Pages
+5. ✅ Public URL live and accessible
+
+### **Implementation Details**
+
+#### **Step 1: SOC Overview Screen**
+**File Created**: `src/components/SOCOverview/SOCOverview.tsx` + CSS
+
+Created immersive start screen with:
+- **Alert Swarm**: 500 animated alert nodes with random positioning
+- **Statistics Display**: 2,847 alerts/hour, 68,328/day, ~95% false positives
+- **David Squiller Alert**: Prominent glowing node with hover preview
+- **Zoom Animation**: Smooth transition to main game on click
+- **Brand Styling**: Trellix colors with dramatic visual impact
+
+**Visual Features:**
+- Floating alert nodes with staggered animations (15-40s cycles)
+- Severity-based colors (low/medium/high/critical)
+- Interactive hover state showing alert details
+- Click handler transitions to playing phase
+
+#### **Step 2: Removed Intro Screen**
+**Files Deleted**: `src/components/IntroScreen/` (entire directory)
+**Files Modified**:
+- `src/components/GameBoard/GameBoard.tsx` - Removed IntroScreen import and phase check
+- `src/types/game.ts` - Updated GamePhase type to remove 'intro'
+
+**New Game Flow:**
+- SOC Overview → Click David alert → Main Game (playing) → Summary (complete)
+- Eliminated redundant intro screen for smoother experience
+- SOC Overview serves as engaging replacement with visual impact
+
+#### **Step 3: Investigation Guide**
+**File Modified**: `src/components/InvestigationGraph/InvestigationGraph.tsx` + CSS
+
+Added downward arrow guide to orient users:
+- **Animated Arrow**: Bouncing arrow (↓) with 1.5s cycle
+- **Instruction Text**: "Give Wise access to data sources in your environment..."
+- **Positioning**: Between alert card and questions
+- **Styling**: Blue-themed box with Trellix brand colors
+
+#### **Step 4: UX Improvements**
+- **Alert Card Height**: Reduced from 400px to 200px for better visibility
+- **Timing Pressure Removed**: Eliminated 45-second completion time metric
+- **Progress Indicators**: Now shows only Confidence, Time Saved, Questions Answered
+
+#### **Step 5: Deployment to Cloudflare Pages**
+
+**Setup Process:**
+1. Initialized Git repository with `.gitignore`
+2. Created initial commit with all project files
+3. Pushed to GitHub: `https://github.com/shristi-trellix/wiseGame.git`
+4. Connected repository to Cloudflare Pages
+5. Configured build settings:
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+   - **Framework**: Vite
+   - **Deploy command**: `echo "No custom deploy needed"`
+
+**Configuration Files:**
+- `.gitignore` - Node modules, dist, build artifacts
+- `wrangler.toml` - Cloudflare Pages configuration
+
+**Deployment Result:**
+- **Live URL**: https://wisegame.pages.dev/
+- **Build Status**: ✅ Successful
+- **CDN**: Cloudflare global edge network
+- **Auto-Deploy**: GitHub push triggers rebuild
+- **HTTPS**: Automatic SSL certificate
+
+### **Code Statistics**
+- **Files Created**: 2 (SOCOverview component)
+- **Files Deleted**: 2 (IntroScreen component)
+- **Files Modified**: 5 (GameBoard, game.ts, InvestigationGraph + CSS, README)
+- **Lines Added**: ~150 lines (SOC Overview + configuration)
+- **Deployment Files**: 3 (.gitignore, wrangler.toml, git config)
+
+### **User Experience Flow**
+1. User visits https://wisegame.pages.dev/
+2. Sees dramatic SOC Overview with 500 animated alerts
+3. Reads statistics (2,847 alerts/hour, 95% false positives)
+4. Hovers over glowing David Squiller alert node
+5. Preview popup shows alert details
+6. Clicks alert → zoom animation
+7. Main game loads with investigation guide
+8. Completes investigation → ROI summary
+
+**Phase 4 Status**: ✅ **COMPLETE** | Game is now publicly accessible!
+
+---
+
+## 🎮 Current State - Live & Production Ready!
 
 ### ✅ **Implemented Features**
-1. **Complete Drag & Drop System**
+1. **SOC Overview Start Screen**
+   - 500 animated alert nodes with realistic swarm effect
+   - Live SOC statistics display
+   - Interactive David Squiller alert with hover preview
+   - Smooth zoom transition to main game
+   - Dramatic visual impact with Trellix branding
+
+2. **Complete Drag & Drop System**
    - All 4 agents draggable (EDR, NDR, Identity, IVX)
    - All 6 questions droppable (with lock/unlock logic)
    - Magnetic snap behavior
    - Visual feedback on drag-over
 
-2. **Full Game Logic**
+3. **Full Game Logic**
    - Agent assignment tracking
    - Correct/incorrect answer processing
    - Confidence score calculation (0% → 98%)
@@ -538,19 +643,19 @@ Enhanced scroll behavior:
    - Question progression (Q1 → Q2 → ... → Q6)
    - Win condition detection
 
-3. **Answer Display System**
+4. **Answer Display System**
    - Correct answers: Green border, high confidence badge
    - Incorrect answers: Red border, low confidence badge, hints
    - Agent labeling (shows which agent was used)
    - Answer text from scenario JSON
 
-4. **Progress Tracking**
+5. **Progress Tracking**
    - Live confidence score (footer)
    - Live time saved (footer)
    - Questions answered counter (footer)
    - Visual question states (locked, active, completed)
 
-5. **Transparency Log with Streaming Animation**
+6. **Transparency Log with Streaming Animation**
    - Character-by-character streaming (30ms per char)
    - Blinking typing cursor during active streaming
    - Sequential entry queuing (one at a time)
@@ -559,13 +664,26 @@ Enhanced scroll behavior:
    - [Wise] prefix in blue
    - Empty state message
 
-6. **Complete Game Flow**
-   - Intro screen → Start game
+7. **Investigation Guide**
+   - Animated downward arrow to guide users
+   - Clear instruction text about data source access
+   - Positioned between alert and questions
+
+8. **Complete Game Flow**
+   - SOC Overview screen → Click David alert
+   - Zoom animation → Main game loads
    - Drag agents to questions → Answer revealed
    - Progress through 6 questions → Build confidence
    - Win conditions met → Remediation button appears
    - Click remediation → ROI summary screen
    - View metrics → Replay option
+
+9. **Public Deployment**
+   - Live at https://wisegame.pages.dev/
+   - GitHub repository integration
+   - Auto-deploy on code changes
+   - Cloudflare CDN for global performance
+   - HTTPS enabled
 
 ### ⚠️ **Pending Features (Phases 4-7)**
 - **Phase 4**: Sound effects (pickup, drop, success, error, victory) - Optional
@@ -622,34 +740,40 @@ With streaming animation complete, the core game experience is fully implemented
 
 ## 📊 Progress Metrics
 
-**Total Files Created**: 30 files
-**Total Lines of Code**: ~3,800 (Phase 1: 3,500 | Phase 2: +200 | Phase 3: +100)
-**Components**: 7 (IntroScreen, GameBoard, AgentToolbox, InvestigationGraph, TransparencyLog, ROISummary, App)
+**Total Files Created**: 33 files
+**Total Lines of Code**: ~4,200 (Phase 1: 3,500 | Phase 2: +200 | Phase 3: +100 | Phase 4: +400)
+**Components**: 7 (SOCOverview, GameBoard, AgentToolbox, InvestigationGraph, TransparencyLog, ROISummary, App)
 **Custom Hooks**: 1 (useStreamingText)
 **Type Definitions**: 11 types, 3 interfaces
 **State Actions**: 9 action types (all implemented)
 **Scenario Questions**: 6 questions (with 24 agent answers total)
-**CSS Classes**: ~52 classes across all components
+**CSS Classes**: ~62 classes across all components
 
 **Phase 1 Completion**: ✅ 100% (Requirements, Setup, UI)
 **Phase 2 Completion**: ✅ 100% (Drag & Drop, Game Logic)
 **Phase 3 Completion**: ✅ 100% (Transparency Log Streaming)
-**Overall Project Completion**: ~75% (Core Features Complete!)
+**Phase 4 Completion**: ✅ 100% (SOC Overview, Deployment)
+**Overall Project Completion**: ~90% (Production Ready!)
 
-**Bug Fixes Completed**:
+**Bug Fixes & Improvements Completed**:
 - ✅ Confidence system rebalanced (40% → 95% gradual progression)
 - ✅ Incorrect agents no longer complete questions
 - ✅ Question 6 converted to "See Wise Verdict" button
 - ✅ Transparency log streaming (no overwrite effect)
+- ✅ Intro screen removed (redundant with SOC Overview)
+- ✅ Investigation guide added (downward arrow)
+- ✅ Alert card height optimized (200px)
+- ✅ Timing pressure removed (no completion time metric)
 
-**Estimated Time to MVP**: MVP ACHIEVED! ✅
-**Estimated Time to Full Polish**: 2-4 hours remaining (Phases 4-7)
+**Deployment Status**: ✅ LIVE at https://wisegame.pages.dev/
+**Estimated Time to Final Polish**: 1-2 hours remaining (optional enhancements)
 
 **Development Velocity:**
 - Phase 1: ~3 hours (requirements + setup + components)
 - Phase 2: ~1 hour (drag-and-drop + game logic)
 - Phase 3: ~1 hour (streaming animation + bug fixes)
-- Total so far: ~5 hours
+- Phase 4: ~1.5 hours (SOC overview + deployment + UX refinements)
+- Total: ~6.5 hours to production-ready game!
 
 ---
 
@@ -686,9 +810,9 @@ wiseGame/
 │   │   │   └── AgentToolbox.css
 │   │   ├── GameBoard/
 │   │   │   └── GameBoard.tsx
-│   │   ├── IntroScreen/
-│   │   │   ├── IntroScreen.tsx
-│   │   │   └── IntroScreen.css
+│   │   ├── SOCOverview/
+│   │   │   ├── SOCOverview.tsx
+│   │   │   └── SOCOverview.css
 │   │   ├── InvestigationGraph/
 │   │   │   ├── InvestigationGraph.tsx
 │   │   │   └── InvestigationGraph.css
@@ -701,6 +825,8 @@ wiseGame/
 │   ├── context/
 │   │   ├── GameContext.tsx
 │   │   └── gameReducer.ts
+│   ├── hooks/
+│   │   └── useStreamingText.ts
 │   ├── types/
 │   │   └── game.ts
 │   ├── App.css
@@ -711,6 +837,8 @@ wiseGame/
 ├── public/
 │   └── scenario-david-squiller.json
 ├── scenario-david-squiller.json
+├── .gitignore
+├── wrangler.toml
 ├── index.html
 ├── package.json
 ├── tsconfig.json
@@ -725,13 +853,21 @@ wiseGame/
 
 ### **State Flow**
 ```
-User clicks "Begin Investigation"
+User visits https://wisegame.pages.dev/
+  ↓
+SOC Overview screen loads (gamePhase: 'soc-overview')
+  ↓
+User hovers over David Squiller alert → Preview popup appears
+  ↓
+User clicks David Squiller alert
   ↓
 dispatch({ type: 'START_GAME' })
   ↓
-gamePhase: 'intro' → 'playing'
+gamePhase: 'soc-overview' → 'playing'
 currentQuestionId: 'q1'
 startTime: Date.now()
+  ↓
+Zoom animation plays → Main game loads
   ↓
 User drags EDR agent to Q1 dropzone
   ↓
@@ -931,14 +1067,15 @@ ROI Summary displayed
 
 ---
 
-## 🚦 Ready to Proceed
+## 🚦 Production Status
 
-**Current Position**: Phase 3 Complete, MVP Achieved! 🎉
-**Next Milestone**: Phase 4+ - Optional Polish & Testing
+**Current Position**: Phase 4 Complete, Deployed & Live! 🌐
+**Live URL**: https://wisegame.pages.dev/
 **Blocker Status**: None
-**Progress**: 75% Complete (MVP Complete, Polish Remaining)
+**Progress**: 90% Complete (Production Ready!)
 
 **Current Game State:**
+- ✅ SOC Overview start screen with alert swarm
 - ✅ Complete drag & drop system
 - ✅ Full game logic and state management
 - ✅ Correct/incorrect agent mechanics
@@ -948,25 +1085,37 @@ ROI Summary displayed
 - ✅ ROI summary screen
 - ✅ Transparency log streaming with typing animation
 - ✅ Question 6 "See Wise Verdict" button
-- ⏳ Sound effects (optional - Phase 4)
-- ⏳ Final polish (pending Phases 5-7)
+- ✅ Investigation guide with animated arrow
+- ✅ Deployed to Cloudflare Pages
+- ✅ GitHub integration with auto-deploy
+- ⏳ Sound effects (optional - Future enhancement)
+- ⏳ Additional polish (optional - Future enhancement)
 
-**Command to resume development:**
+**Play Online:**
+Visit https://wisegame.pages.dev/ to play the live game!
+
+**Local Development:**
 ```bash
 cd c:\Users\ShristiSharma\Desktop\wiseGame
 npm run dev
 # Navigate to http://localhost:3000
-# Game is playable - try dragging agents to questions!
 ```
 
-**Try Playing:**
-1. Click "Begin Investigation"
-2. Drag EDR agent to Question 1
-3. Watch confidence and time saved increase
-4. Continue through all 6 questions
-5. Click "Execute Agentic Remediation"
-6. View your ROI summary!
+**How to Play:**
+1. Visit https://wisegame.pages.dev/
+2. View SOC Overview with 500 animated alerts
+3. Hover over glowing David Squiller alert node
+4. Click to begin investigation
+5. Drag agents to questions (EDR, NDR, Identity, IVX)
+6. Build confidence to 95% and save 15.5 minutes
+7. Click "See Wise Verdict" for Question 6
+8. Execute Agentic Remediation
+9. View your ROI metrics!
+
+**Repository:**
+- GitHub: https://github.com/shristi-trellix/wiseGame
+- Auto-deploys on push to main branch
 
 ---
 
-**End of CLAUDE.md** | Last updated: 2026-02-11 | Phase 3 Complete ✅ | MVP Achieved 🎉
+**End of CLAUDE.md** | Last updated: 2026-02-11 | Phase 4 Complete ✅ | Live & Production Ready 🌐

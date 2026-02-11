@@ -4,7 +4,9 @@ An interactive game demonstrating Trellix Wise's agentic flows for security aler
 
 ## 🌐 Play Online
 
-**Live Demo:** Coming soon on Cloudflare Pages
+**🎮 Live Demo:** [https://wisegame.pages.dev/](https://wisegame.pages.dev/)
+
+Experience the game directly in your browser - no installation required!
 
 ## 🎮 Game Overview
 
@@ -42,14 +44,16 @@ wiseGame/
 ├── src/
 │   ├── components/          # React components
 │   │   ├── GameBoard/       # Main game container
+│   │   ├── SOCOverview/     # Start screen with alert swarm
 │   │   ├── AgentToolbox/    # Left panel - draggable agents
 │   │   ├── InvestigationGraph/ # Center panel - question cards
 │   │   ├── TransparencyLog/ # Right panel - streaming log
-│   │   ├── IntroScreen/     # Welcome/intro screen
 │   │   └── ROISummary/      # Win screen with metrics
 │   ├── context/             # State management
 │   │   ├── GameContext.tsx  # React Context provider
 │   │   └── gameReducer.ts   # Game state reducer
+│   ├── hooks/               # Custom React hooks
+│   │   └── useStreamingText.ts # Typing animation hook
 │   ├── types/               # TypeScript definitions
 │   │   └── game.ts          # Game state & scenario types
 │   ├── App.tsx              # Root component
@@ -57,28 +61,33 @@ wiseGame/
 │   └── index.css            # Global styles (Trellix theme)
 ├── public/
 │   └── scenario-david-squiller.json  # Game scenario data
-├── scenario-david-squiller.json      # Source scenario file
+├── .gitignore               # Git ignore rules
+├── wrangler.toml            # Cloudflare Pages config
 └── package.json             # Dependencies
 
 ## 🎯 Game Features
 
-### Implemented (Phase 1 - Complete ✅)
-- ✅ Full React + TypeScript + Vite project setup
-- ✅ Trellix brand styling (#1A1A1A background, #2814FF agent glow)
-- ✅ State management with Context + useReducer
-- ✅ 3-panel layout (Agent Toolbox, Investigation Board, Transparency Log)
-- ✅ Intro screen with game instructions
-- ✅ ROI summary screen with metrics
-- ✅ Question progression system
-- ✅ Progress indicators (confidence, time saved, questions answered)
-- ✅ Scenario data loaded from JSON
+### ✅ Fully Implemented & Deployed
+- ✅ **SOC Overview Screen**: Engaging start screen with 500 animated alert nodes
+- ✅ **Interactive Alert**: Hover preview and zoom animation on David Squiller alert
+- ✅ **Drag & Drop System**: Smooth agent deployment with @hello-pangea/dnd
+- ✅ **Full Game Logic**: Agent assignment, confidence scoring, time tracking
+- ✅ **6 Investigation Questions**: Linear progression with lock/unlock mechanics
+- ✅ **Answer Feedback**: Correct/incorrect validation with hints
+- ✅ **Transparency Log**: Character-by-character streaming with typing cursor
+- ✅ **Investigation Guide**: Animated arrow guiding users through questions
+- ✅ **Progress Tracking**: Real-time confidence, time saved, questions answered
+- ✅ **ROI Summary**: Victory screen with automated remediation actions
+- ✅ **Trellix Branding**: Full brand styling with #1A1A1A and #2814FF colors
+- ✅ **Production Deployment**: Live on Cloudflare Pages with auto-deploy
 
-### Coming Next (Phase 2)
-- Drag & Drop with @hello-pangea/dnd
-- Agent assignment logic
-- Transparency log streaming
-- Error handling & feedback (shake animation, hints)
-- Sound effects
+### 🎮 Game Flow
+1. **SOC Overview** → View 2,847 alerts/hour, 95% false positives
+2. **Click Alert** → David Squiller investigation begins with zoom animation
+3. **Drag Agents** → Deploy EDR, NDR, Identity, IVX to answer questions
+4. **Build Confidence** → Reach 95% through correct agent selection
+5. **Execute Remediation** → See automated response actions
+6. **View ROI** → 15.5 minutes saved, 6/6 questions answered
 
 ## 🎨 Design System
 
@@ -109,19 +118,40 @@ wiseGame/
 - **Build Tool**: Vite 6.0.3
 - **Drag & Drop**: @hello-pangea/dnd 17.0.0
 - **State**: React Context + useReducer
+- **Deployment**: Cloudflare Pages
+- **Repository**: GitHub with auto-deploy
+
+## 🚀 Deployment
+
+**Live URL:** https://wisegame.pages.dev/
+
+**Deployment Platform:** Cloudflare Pages
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Auto-Deploy**: Enabled on push to `main` branch
+- **CDN**: Global edge network for fast loading
+- **HTTPS**: Automatic SSL certificate
+
+**Repository:** [https://github.com/shristi-trellix/wiseGame](https://github.com/shristi-trellix/wiseGame)
 
 ## 📝 Development Status
 
 **Phase 1: Core Architecture** ✅ COMPLETE
-- Project setup, state management, and basic UI complete
+**Phase 2: Drag & Drop + Game Logic** ✅ COMPLETE
+**Phase 3: Transparency Log Streaming** ✅ COMPLETE
+**Phase 4: SOC Overview + Deployment** ✅ COMPLETE
 
-**Next Steps:**
-- Phase 2: Implement drag-and-drop functionality
-- Phase 3: Connect game logic to scenario data
-- Phase 4: Add transparency log streaming animation
-- Phase 5: Implement feedback mechanisms
-- Phase 6: Polish & sound effects
-- Phase 7: Playwright testing
+**🌐 Production Status:**
+- ✅ Live at https://wisegame.pages.dev/
+- ✅ GitHub repository with auto-deploy
+- ✅ ~90% feature complete
+- ✅ Production-ready and playable
+
+**Optional Future Enhancements:**
+- Sound effects (pickup, drop, success, error sounds)
+- Additional scenarios beyond David Squiller case
+- Tutorial tooltips for first-time players
+- Analytics and telemetry
 
 ## 📖 Documentation
 
