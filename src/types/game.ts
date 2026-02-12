@@ -12,6 +12,23 @@ export interface LogEntry {
   agentType?: AgentType;
 }
 
+// Timeline event for replay visualization
+export interface TimelineEvent {
+  id: string;
+  type: 'alert' | 'question' | 'decision';
+  order: number;
+  questionId?: string;
+  questionText?: string;
+  agentType?: AgentType;
+  confidenceGained: number;
+  cumulativeConfidence: number;
+  timeSaved: number;
+  cumulativeTime: number;
+  keyFinding: string;
+  isCorrect?: boolean;
+  transparencySteps?: string[];
+}
+
 // Question answer for different agents
 export interface QuestionAnswer {
   confidence: number;

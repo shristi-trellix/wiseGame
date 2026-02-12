@@ -2,9 +2,9 @@
 
 **Project**: Wise Detective - The Auto-Investigation Challenge
 **Purpose**: Interactive game demonstrating Trellix Wise's agentic flows for security alert triage
-**Status**: Deployed & Live ✅ | Public Demo Available 🌐 | Production Ready 🎉
+**Status**: Deployed & Live ✅ | Public Demo Available 🌐 | Feature Complete 🎉
 **Live URL**: https://wisegame.pages.dev/
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -619,6 +619,242 @@ Added downward arrow guide to orient users:
 
 ---
 
+## 🎯 Phase 5: Timeline Replay Feature (COMPLETE ✅)
+
+### **Objectives Achieved**
+1. ✅ Created automatic timeline replay on ROI summary screen
+2. ✅ Implemented sequential card animation (7 nodes total)
+3. ✅ Added streaming particle system mimicking SOC alert swarm
+4. ✅ Built data processing pipeline from game state to timeline events
+5. ✅ Integrated animated confidence bars and time saved badges
+
+### **Implementation Details**
+
+#### **Step 1: Type Definitions**
+**File Modified**: `src/types/game.ts`
+
+Added `TimelineEvent` interface for structured timeline data:
+```typescript
+export interface TimelineEvent {
+  id: string;
+  type: 'alert' | 'question' | 'decision';
+  order: number;
+  questionId?: string;
+  questionText?: string;
+  agentType?: AgentType;
+  confidenceGained: number;
+  cumulativeConfidence: number;
+  timeSaved: number;
+  cumulativeTime: number;
+  keyFinding: string;
+  isCorrect?: boolean;
+}
+```
+
+#### **Step 2: Timeline Components**
+**Files Created**: 4 new components in `src/components/TimelineReplay/`
+
+**1. TimelineReplay.tsx** - Main orchestrator component (~160 lines)
+- **buildTimelineEvents()**: Converts game state to timeline event array
+  - Extracts initial alert as event 0
+  - Processes 6 completed questions as events 1-6
+  - Calculates cumulative confidence and time saved
+  - Extracts key findings (first sentence or 100 chars)
+- **Sequential Animation Logic**:
+  - `currentEventIndex` state tracks which card is active
+  - 800ms display time per card + 500ms gap between cards
+  - Total animation: ~9 seconds for 7 cards
+- **Particle System**:
+  - Generates 50 particles per card activation
+  - Random sizes (2-5px), durations (1.5-3s), vertical positions (30-70%)
+  - Particles stream from left to right across full timeline width
+  - Auto-cleanup after 4 seconds to prevent memory buildup
+
+**2. TimelineNode.tsx** - Individual timeline card (~115 lines)
+- **Visual Elements**:
+  - Order badge (top-left numbered circle)
+  - Time saved badge (top-right with ⏱️ icon)
+  - Agent icon (colored emoji with drop-shadow glow)
+  - Question text (truncated to 2.6rem min-height)
+  - Key finding (monospace terminal font)
+  - Confidence bar with +X% gain and cumulative total
+- **Node States**:
+  - `pending`: opacity 0, visibility hidden
+  - `active`: scale 1.05, glowing border, box-shadow
+  - `completed`: opacity 0.85, green border
+- **Animation Control**:
+  - Uses `useRef` to prevent duplicate completion calls
+  - Immediate text display (no streaming for speed)
+  - 800ms timer before triggering next card
+
+**3. TimelineConnector.tsx** - Animated SVG line (~35 lines)
+- **SVG Line**: 60px width, 2px stroke
+- **Gradient**: Blue glow fading from left to right
+- **Animation States**:
+  - `pending`: opacity 0, hidden
+  - `animating`: stroke-dashoffset draws line over 0.5s
+  - `completed`: full opacity, visible
+
+**4. ConfidenceBar.tsx** - Animated progress bar (~40 lines)
+- **Color Coding**:
+  - Red (#FF4444): < 50%
+  - Orange (#FFA500): 50-69%
+  - Blue (--color-agent-glow): 70-94%
+  - Green (--color-success): ≥ 95%
+- **Animation**: Smooth width transition using cubic-bezier easing
+
+#### **Step 3: Streaming Particle System**
+**Files Modified**: `TimelineReplay.tsx` + `TimelineReplay.css`
+
+**Particle Generation Logic**:
+```typescript
+// Generate burst of 50 particles when new card activates
+useEffect(() => {
+  if (currentEventIndex < 0 || isComplete) return;
+
+  const newParticles: Particle[] = [];
+  const particleCount = 50;
+
+  for (let i = 0; i < particleCount; i++) {
+    newParticles.push({
+      id: Date.now() + i + Math.random() * 1000,
+      top: 30 + Math.random() * 40, // 30-70% vertical position
+      size: 2 + Math.random() * 3,   // 2-5px diameter
+      duration: 1.5 + Math.random() * 1.5, // 1.5-3s
+      delay: Math.random() * 0.5,    // 0-0.5s delay
+    });
+  }
+
+  setParticles(prev => [...prev, ...newParticles]);
+
+  // Cleanup after 4s
+  const cleanup = setTimeout(() => {
+    setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+  }, 4000);
+
+  return () => clearTimeout(cleanup);
+}, [currentEventIndex, isComplete]);
+```
+
+**CSS Animation**:
+```css
+@keyframes streamFlow {
+  0% { left: 0%; opacity: 0; }
+  5% { opacity: 0.6; }
+  95% { opacity: 0.4; }
+  100% { left: 100%; opacity: 0; }
+}
+```
+
+**Visual Effect**:
+- Hundreds of tiny blue circles flow from left to right
+- Particles fade in at 5%, fade out at 95%
+- Mimics SOC overview alert swarm aesthetic
+- Creates visual representation of data flow through investigation
+
+#### **Step 4: ROI Summary Integration**
+**File Modified**: `src/components/ROISummary/ROISummary.tsx`
+
+Restructured layout for full-width timeline:
+```typescript
+<div className="roi-summary">
+  {/* Header: Investigation Complete */}
+  <div className="summary-container">
+    <div className="summary-verdict">🎉 Investigation Complete!</div>
+    <h1 className="summary-title">Threat Successfully Contained</h1>
+  </div>
+
+  {/* Timeline Replay - Full Width */}
+  <TimelineReplay
+    state={state}
+    scenario={scenario}
+    onComplete={() => setReplayComplete(true)}
+  />
+
+  {/* Metrics Cards - Delayed until timeline completes */}
+  <div className="summary-container">
+    <div className="summary-metrics" style={{ animationDelay: replayComplete ? '0.5s' : '999s' }}>
+      {/* 4 metric cards */}
+    </div>
+  </div>
+</div>
+```
+
+**Layout Changes**:
+- Changed from horizontal center layout to vertical flex column
+- Timeline breaks out of summary-container for full width
+- Metrics animation delayed until `replayComplete === true`
+- Fixed scrolling issues (body overflow-y: auto, #root min-height: 100vh)
+
+#### **Step 5: Styling & Animations**
+**File Created**: `src/components/TimelineReplay/TimelineReplay.css` (~305 lines)
+
+**Key CSS Classes**:
+- `.timeline-replay`: Container with gradient background
+- `.timeline-track`: Horizontal flexbox with relative positioning
+- `.timeline-stream-particles`: Absolute positioned particle container (z-index: 0)
+- `.stream-particle`: Individual particle with border-radius: 50%
+- `.timeline-node`: Card styling with 3 states (pending/active/completed)
+- `.node-agent-icon`: Agent emoji with color-coded drop-shadow
+- `.confidence-bar-fill`: Animated width with cubic-bezier transition
+- `.node-time`, `.node-order`: Positioned badges (top-right, top-left)
+
+**Animations**:
+- `nodeActivate`: Scale and opacity animation (0.3s)
+- `drawLine`: Stroke-dashoffset line drawing (0.5s)
+- `streamFlow`: Left position with opacity fade (1.5-3s variable)
+
+### **Data Flow**
+
+```
+ROI Summary Screen Loads
+  ↓
+buildTimelineEvents() processes game state
+  ↓
+Timeline events array created (7 nodes):
+  - Event 0: Initial Alert (0% confidence, ⚠️ icon)
+  - Event 1: Q1 + EDR (40% cumulative, +3 min)
+  - Event 2: Q2 + Identity (52% cumulative, +2 min)
+  - Event 3: Q3 + EDR (63% cumulative, +2.5 min)
+  - Event 4: Q4 + IVX (74% cumulative, +4 min)
+  - Event 5: Q5 + NDR (84% cumulative, +2.5 min)
+  - Event 6: Q6 + WISE (95% cumulative, +1.5 min)
+  ↓
+Sequential animation begins (currentEventIndex = 0)
+  ↓
+For each card:
+  1. Generate 50 streaming particles
+  2. Card fades in with scale animation (0.3s)
+  3. Text displays immediately
+  4. Confidence bar animates to cumulative value (0.5s)
+  5. Wait 800ms to show content
+  6. Trigger next card (500ms gap)
+  ↓
+All 7 cards complete (~9 seconds total)
+  ↓
+onComplete() callback → Metrics cards fade in
+```
+
+### **Code Statistics**
+- **Files Created**: 5 (TimelineReplay.tsx, TimelineNode.tsx, TimelineConnector.tsx, ConfidenceBar.tsx, TimelineReplay.css)
+- **Files Modified**: 3 (game.ts, ROISummary.tsx, ROISummary.css, index.css)
+- **Lines Added**: ~650 lines total
+- **New Components**: 4 React components + 1 CSS file
+- **Compilation Status**: ✅ No errors, all HMR updates successful
+
+### **User Experience**
+1. **ROI screen loads** → "Investigation Complete" header appears
+2. **Timeline starts** → Initial alert card fades in with particle burst
+3. **Sequential progression** → Each card activates one at a time (1.3s per card)
+4. **Streaming particles** → Hundreds of blue circles flow left-to-right as timeline progresses
+5. **Visual feedback** → Confidence bars fill, time badges glow, agent icons pulse
+6. **Completion** → All 7 cards visible, particles fade out
+7. **Metrics reveal** → ROI metric cards animate in below timeline
+
+**Phase 5 Status**: ✅ **COMPLETE** | Timeline Replay with Streaming Particles!
+
+---
+
 ## 🎮 Current State - Live & Production Ready!
 
 ### ✅ **Implemented Features**
@@ -669,46 +905,58 @@ Added downward arrow guide to orient users:
    - Clear instruction text about data source access
    - Positioned between alert and questions
 
-8. **Complete Game Flow**
+8. **Timeline Replay Feature**
+   - Automatic playback on ROI summary screen
+   - Sequential animation of 7 timeline nodes (initial alert + 6 questions)
+   - Streaming particle system (50 particles per card, hundreds total)
+   - Visual data flow mimicking SOC alert swarm aesthetic
+   - Animated confidence bars showing cumulative progress (0% → 95%)
+   - Time saved badges with ⏱️ icons
+   - Agent icons with color-coded glows
+   - Smooth transitions between cards (800ms display + 500ms gap)
+   - ~9 second total animation duration
+   - Full-width layout breaking out of center container
+
+9. **Complete Game Flow**
    - SOC Overview screen → Click David alert
    - Zoom animation → Main game loads
    - Drag agents to questions → Answer revealed
    - Progress through 6 questions → Build confidence
    - Win conditions met → Remediation button appears
    - Click remediation → ROI summary screen
-   - View metrics → Replay option
+   - Timeline replay auto-plays → Metrics reveal
 
-9. **Public Deployment**
-   - Live at https://wisegame.pages.dev/
-   - GitHub repository integration
-   - Auto-deploy on code changes
-   - Cloudflare CDN for global performance
-   - HTTPS enabled
+10. **Public Deployment**
+    - Live at https://wisegame.pages.dev/
+    - GitHub repository integration
+    - Auto-deploy on code changes
+    - Cloudflare CDN for global performance
+    - HTTPS enabled
 
-### ⚠️ **Pending Features (Phases 4-7)**
-- **Phase 4**: Sound effects (pickup, drop, success, error, victory) - Optional
-- **Phase 5**: Final polish (tutorial tooltips, edge case handling, accessibility)
-- **Phase 6**: Performance optimization, cross-browser testing
-- **Phase 7**: Playwright testing suite
-
----
-
-## 🚀 Next Steps - Phase 4+: Final Polish & Testing
-
-With streaming animation complete, the core game experience is fully implemented. Remaining work focuses on polish and testing.
+### ⚠️ **Pending Features (Optional Enhancements)**
+- **Sound Effects**: Audio feedback (pickup, drop, success, error, victory) - Optional
+- **Tutorial Tooltips**: First-time user guidance - Optional
+- **Performance Testing**: Cross-browser testing, accessibility improvements
+- **Playwright Testing Suite**: Automated end-to-end tests
 
 ---
 
-## 📅 Remaining Roadmap - Phases 4-7
+## 🚀 Next Steps - Optional Polish & Testing
 
-### **Phase 4: Sound Effects** (1 hour)
+With Timeline Replay complete, the core game experience is fully implemented and production-ready. Remaining work focuses on optional enhancements and automated testing.
+
+---
+
+## 📅 Optional Enhancement Roadmap
+
+### **Optional: Sound Effects** (1 hour)
 - [ ] Find/create 5 sound assets (pickup, drop, success, error, victory)
 - [ ] Create sound manager hook or utility
 - [ ] Add audio files to public folder
 - [ ] Play sounds on: drag start, drop, correct answer, incorrect answer, game complete
 - [ ] Optional: Add mute toggle button
 
-### **Phase 5: Polish & Edge Cases** (2 hours)
+### **Optional: Polish & Edge Cases** (2 hours)
 - [ ] Add interactive tooltip hints (first-time guidance)
 - [ ] Handle rapid clicking/double drops
 - [ ] Add shake animation for incorrect drops (CSS already exists)
@@ -716,7 +964,7 @@ With streaming animation complete, the core game experience is fully implemented
 - [ ] Cross-browser testing (Chrome, Edge, Firefox)
 - [ ] Accessibility: ARIA labels, keyboard navigation
 
-### **Phase 6: Playwright Testing** (2-3 hours)
+### **Optional: Playwright Testing** (2-3 hours)
 - [ ] Set up Playwright test suite
 - [ ] Test: Agent Logic (NDR on process question → low confidence)
 - [ ] Test: Breadcrumb Check (90-day lookback dialogue appears for Identity agent on Q2)
@@ -740,20 +988,22 @@ With streaming animation complete, the core game experience is fully implemented
 
 ## 📊 Progress Metrics
 
-**Total Files Created**: 33 files
-**Total Lines of Code**: ~4,200 (Phase 1: 3,500 | Phase 2: +200 | Phase 3: +100 | Phase 4: +400)
-**Components**: 7 (SOCOverview, GameBoard, AgentToolbox, InvestigationGraph, TransparencyLog, ROISummary, App)
+**Total Files Created**: 38 files
+**Total Lines of Code**: ~4,850 (Phase 1: 3,500 | Phase 2: +200 | Phase 3: +100 | Phase 4: +400 | Phase 5: +650)
+**Components**: 11 (SOCOverview, GameBoard, AgentToolbox, InvestigationGraph, TransparencyLog, ROISummary, TimelineReplay, TimelineNode, TimelineConnector, ConfidenceBar, App)
 **Custom Hooks**: 1 (useStreamingText)
-**Type Definitions**: 11 types, 3 interfaces
+**Type Definitions**: 12 types, 4 interfaces (added TimelineEvent + Particle)
 **State Actions**: 9 action types (all implemented)
 **Scenario Questions**: 6 questions (with 24 agent answers total)
-**CSS Classes**: ~62 classes across all components
+**CSS Classes**: ~75 classes across all components
+**Particle System**: 50 particles per card × 7 cards = up to 350 concurrent particles
 
 **Phase 1 Completion**: ✅ 100% (Requirements, Setup, UI)
 **Phase 2 Completion**: ✅ 100% (Drag & Drop, Game Logic)
 **Phase 3 Completion**: ✅ 100% (Transparency Log Streaming)
 **Phase 4 Completion**: ✅ 100% (SOC Overview, Deployment)
-**Overall Project Completion**: ~90% (Production Ready!)
+**Phase 5 Completion**: ✅ 100% (Timeline Replay, Streaming Particles)
+**Overall Project Completion**: ~95% (Feature Complete!)
 
 **Bug Fixes & Improvements Completed**:
 - ✅ Confidence system rebalanced (40% → 95% gradual progression)
@@ -764,16 +1014,21 @@ With streaming animation complete, the core game experience is fully implemented
 - ✅ Investigation guide added (downward arrow)
 - ✅ Alert card height optimized (200px)
 - ✅ Timing pressure removed (no completion time metric)
+- ✅ Timeline replay added to ROI summary
+- ✅ Streaming particle system (hundreds of animated circles)
+- ✅ ROI summary layout restructured for full-width timeline
+- ✅ Page scrolling fixed (body overflow, #root min-height)
 
 **Deployment Status**: ✅ LIVE at https://wisegame.pages.dev/
-**Estimated Time to Final Polish**: 1-2 hours remaining (optional enhancements)
+**Estimated Time to Final Polish**: 1-2 hours remaining (optional enhancements only)
 
 **Development Velocity:**
 - Phase 1: ~3 hours (requirements + setup + components)
 - Phase 2: ~1 hour (drag-and-drop + game logic)
 - Phase 3: ~1 hour (streaming animation + bug fixes)
 - Phase 4: ~1.5 hours (SOC overview + deployment + UX refinements)
-- Total: ~6.5 hours to production-ready game!
+- Phase 5: ~2 hours (timeline replay + streaming particles + layout fixes)
+- **Total: ~8.5 hours to feature-complete game!**
 
 ---
 
@@ -1069,10 +1324,10 @@ ROI Summary displayed
 
 ## 🚦 Production Status
 
-**Current Position**: Phase 4 Complete, Deployed & Live! 🌐
+**Current Position**: Phase 5 Complete, Feature Complete! 🎉
 **Live URL**: https://wisegame.pages.dev/
 **Blocker Status**: None
-**Progress**: 90% Complete (Production Ready!)
+**Progress**: 95% Complete (Feature Complete!)
 
 **Current Game State:**
 - ✅ SOC Overview start screen with alert swarm
@@ -1086,6 +1341,7 @@ ROI Summary displayed
 - ✅ Transparency log streaming with typing animation
 - ✅ Question 6 "See Wise Verdict" button
 - ✅ Investigation guide with animated arrow
+- ✅ **Timeline Replay with streaming particles** (NEW!)
 - ✅ Deployed to Cloudflare Pages
 - ✅ GitHub integration with auto-deploy
 - ⏳ Sound effects (optional - Future enhancement)
@@ -1098,7 +1354,7 @@ Visit https://wisegame.pages.dev/ to play the live game!
 ```bash
 cd c:\Users\ShristiSharma\Desktop\wiseGame
 npm run dev
-# Navigate to http://localhost:3000
+# Navigate to http://localhost:3001
 ```
 
 **How to Play:**
@@ -1110,7 +1366,8 @@ npm run dev
 6. Build confidence to 95% and save 15.5 minutes
 7. Click "See Wise Verdict" for Question 6
 8. Execute Agentic Remediation
-9. View your ROI metrics!
+9. **Watch timeline replay with streaming particles**
+10. View your ROI metrics!
 
 **Repository:**
 - GitHub: https://github.com/shristi-trellix/wiseGame

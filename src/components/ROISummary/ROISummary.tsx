@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
+import { TimelineReplay } from '../TimelineReplay/TimelineReplay';
 import './ROISummary.css';
 
 const ROISummary: React.FC = () => {
   const { state, scenario } = useGame();
+  const [replayComplete, setReplayComplete] = useState(false);
 
   const reachedConfidenceGoal = state.confidenceScore >= (scenario?.winConditions.minConfidenceScore || 95);
   const reachedTimeGoal = state.timeSaved >= (scenario?.winConditions.minTimeSaved || 12);
@@ -22,8 +24,24 @@ const ROISummary: React.FC = () => {
         <h1 className="summary-title">
           {isVictory ? 'Threat Successfully Contained' : 'Additional Analysis Required'}
         </h1>
+      </div>
 
-        <div className="summary-metrics">
+      {/* Timeline Replay - Full Width */}
+      {scenario && (
+        <TimelineReplay
+          state={state}
+          scenario={scenario}
+          onComplete={() => setReplayComplete(true)}
+        />
+      )}
+
+      <div className="summary-container">
+        <div
+          className="summary-metrics"
+          style={{
+            animationDelay: replayComplete ? '0.5s' : '999s',
+          }}
+        >
           <div className="metric-card">
             <div className="metric-label">Confidence Score</div>
             <div className={`metric-value ${reachedConfidenceGoal ? 'success' : 'warning'}`}>

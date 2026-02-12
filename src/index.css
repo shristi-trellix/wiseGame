@@ -34,12 +34,13 @@ body {
   min-height: 100vh;
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #root {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Monospace font for code/logs */
