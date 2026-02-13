@@ -1,5 +1,15 @@
 // Agent types
-export type AgentType = 'EDR' | 'NDR' | 'Identity' | 'IVX' | 'WISE';
+export type AgentType =
+  | 'EDR'       // Endpoint Detection & Response
+  | 'NDR'       // Network Detection & Response
+  | 'Identity'  // Identity & Access Management
+  | 'IVX'       // Intelligent Virtual eXecution (sandbox)
+  | 'WISE'      // Wise AI Reasoning Engine
+  | 'Splunk'    // Splunk SIEM with indexed telemetry
+  | 'Proxy'     // Web proxy logs (HTTP/HTTPS traffic)
+  | 'S3'        // VPC flow logs in S3 buckets
+  | 'Oracle'    // Oracle HR/Identity database
+  | 'OTMonitor'; // OT protocol monitoring (Modbus, SCADA)
 
 // Game phases
 export type GamePhase = 'soc-overview' | 'playing' | 'complete';
@@ -84,6 +94,7 @@ export interface Scenario {
 
 // Game state
 export interface GameState {
+  scenario: Scenario | null;
   currentQuestionId: string | null;
   completedQuestions: string[];
   agentAssignments: Record<string, AgentType>;
@@ -98,6 +109,7 @@ export interface GameState {
 
 // Game actions for reducer
 export type GameAction =
+  | { type: 'SET_SCENARIO'; payload: Scenario }
   | { type: 'START_GAME' }
   | { type: 'ASSIGN_AGENT'; payload: { questionId: string; agentType: AgentType } }
   | { type: 'UPDATE_CONFIDENCE'; payload: { confidence: number; timeSaved: number } }

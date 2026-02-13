@@ -1,14 +1,46 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
+import { useGame } from '../../context/GameContext';
 import './AgentToolbox.css';
 
 const AgentToolbox: React.FC = () => {
-  const agents = [
-    { id: 'EDR', name: 'EDR Agent', description: 'Process creation & file changes', color: '#2814FF' },
-    { id: 'NDR', name: 'NDR Agent', description: 'Network traffic & C2 beacons', color: '#00CD00' },
-    { id: 'Identity', name: 'Identity Agent', description: 'User roles & access levels', color: '#FFA500' },
-    { id: 'IVX', name: 'IVX Agent', description: 'File sandboxing & malware analysis', color: '#FF4444' },
+  const { state } = useGame();
+  const scenario = state.scenario;
+
+  // All available agents (excluding WISE - it's the AI orchestrator, not a draggable agent)
+  const allAgents = [
+    { id: 'EDR', name: 'EDR Agent', description: 'Endpoint process & file activity', color: '#00D9FF', icon: '🖥️' },
+    { id: 'NDR', name: 'NDR Agent', description: 'Network traffic & correlation', color: '#00FF94', icon: '🌐' },
+    { id: 'Identity', name: 'Identity Agent', description: 'User roles & access levels', color: '#FF6B00', icon: '👤' },
+    { id: 'IVX', name: 'IVX Agent', description: 'File sandboxing & malware analysis', color: '#FF00FF', icon: '🔬' },
+    { id: 'Splunk', name: 'Splunk Index', description: 'Indexed EDR & log search', color: '#00C853', icon: '🔍' },
+    { id: 'Proxy', name: 'Proxy Logs', description: 'Web traffic & URL filtering', color: '#FFB300', icon: '🌍' },
+    { id: 'S3', name: 'S3 Flow Logs', description: 'VPC flow logs in cloud storage', color: '#FF6F00', icon: '☁️' },
+    { id: 'Oracle', name: 'Oracle DB', description: 'HR & identity data queries', color: '#D32F2F', icon: '🗄️' },
+    { id: 'OTMonitor', name: 'OT Monitor', description: 'Industrial protocol analysis', color: '#7B1FA2', icon: '🏭' },
   ];
+
+  // Filter agents based on current scenario
+  const agents = useMemo(() => {
+    if (!scenario) return [];
+
+    // David Squiller scenario: only show IT/enterprise agents
+    if (scenario.id === 'david-squiller') {
+      return allAgents.filter(agent =>
+        ['EDR', 'NDR', 'Identity', 'IVX'].includes(agent.id)
+      );
+    }
+
+    // PLC Hijacking scenario: show multi-source telemetry agents
+    if (scenario.id === 'plc-hijacking-manufacturing') {
+      return allAgents.filter(agent =>
+        ['Splunk', 'S3', 'Oracle', 'OTMonitor', 'NDR'].includes(agent.id)
+      );
+    }
+
+    // Default: show all agents (shouldn't happen, but safe fallback)
+    return allAgents;
+  }, [scenario]);
 
   return (
     <div className="agent-toolbox">
@@ -41,7 +73,7 @@ const AgentToolbox: React.FC = () => {
                     }}
                   >
                     <div className="agent-icon" style={{ backgroundColor: agent.color }}>
-                      {agent.id}
+                      {agent.icon}
                     </div>
                     <div className="agent-info">
                       <div className="agent-name">{agent.name}</div>

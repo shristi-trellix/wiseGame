@@ -150,12 +150,17 @@
   margin-bottom: 0.5rem;
 }
 
-.node-agent-icon.EDR { filter: drop-shadow(0 0 8px #00D9FF); }
-.node-agent-icon.NDR { filter: drop-shadow(0 0 8px #00FF94); }
-.node-agent-icon.Identity { filter: drop-shadow(0 0 8px #FF6B00); }
-.node-agent-icon.IVX { filter: drop-shadow(0 0 8px #FF00FF); }
-.node-agent-icon.WISE { filter: drop-shadow(0 0 8px var(--color-agent-glow)); }
-.node-agent-icon.alert-icon { filter: drop-shadow(0 0 8px #FFA500); }
+.node-agent-icon.EDR { filter: drop-shadow(0 0 8px var(--color-edr)); }
+.node-agent-icon.NDR { filter: drop-shadow(0 0 8px var(--color-ndr)); }
+.node-agent-icon.Identity { filter: drop-shadow(0 0 8px var(--color-identity)); }
+.node-agent-icon.IVX { filter: drop-shadow(0 0 8px var(--color-ivx)); }
+.node-agent-icon.WISE { filter: drop-shadow(0 0 8px var(--color-wise)); }
+.node-agent-icon.Splunk { filter: drop-shadow(0 0 8px var(--color-splunk)); }
+.node-agent-icon.Proxy { filter: drop-shadow(0 0 8px var(--color-proxy)); }
+.node-agent-icon.S3 { filter: drop-shadow(0 0 8px var(--color-s3)); }
+.node-agent-icon.Oracle { filter: drop-shadow(0 0 8px var(--color-oracle)); }
+.node-agent-icon.OTMonitor { filter: drop-shadow(0 0 8px var(--color-otmonitor)); }
+.node-agent-icon.alert-icon { filter: drop-shadow(0 0 8px var(--color-warning)); }
 
 /* Question Text */
 .node-question {

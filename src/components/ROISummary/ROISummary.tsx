@@ -4,7 +4,8 @@ import { TimelineReplay } from '../TimelineReplay/TimelineReplay';
 import './ROISummary.css';
 
 const ROISummary: React.FC = () => {
-  const { state, scenario } = useGame();
+  const { state } = useGame();
+  const scenario = state.scenario;
   const [replayComplete, setReplayComplete] = useState(false);
 
   const reachedConfidenceGoal = state.confidenceScore >= (scenario?.winConditions.minConfidenceScore || 95);

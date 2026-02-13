@@ -4,7 +4,8 @@ import { useGame } from '../../context/GameContext';
 import './InvestigationGraph.css';
 
 const InvestigationGraph: React.FC = () => {
-  const { state, scenario, dispatch } = useGame();
+  const { state, dispatch } = useGame();
+  const scenario = state.scenario;
 
   const handleWiseDecision = (questionId: string) => {
     const question = scenario?.questions.find(q => q.id === questionId);

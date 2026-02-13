@@ -17,6 +17,11 @@ const getAgentIcon = (agent: AgentType): string => {
     Identity: '👤',
     IVX: '🔬',
     WISE: '🧠',
+    Splunk: '🔍',
+    Proxy: '🌍',
+    S3: '☁️',
+    Oracle: '🗄️',
+    OTMonitor: '🏭',
   };
   return icons[agent] || '•';
 };

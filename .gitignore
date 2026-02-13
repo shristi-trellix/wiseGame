@@ -31,3 +31,13 @@ dist-ssr
 # Build outputs
 build
 *.tsbuildinfo
+
+Cyber_OT_pcap/
+
+.claude
+
+CLAUDE.md
+
+Wise Auto Investigation.txt
+
+Wise Auto-investigation Product Requirements Document (1).md

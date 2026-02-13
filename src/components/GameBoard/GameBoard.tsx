@@ -10,7 +10,8 @@ import { AgentType, LogEntry } from '../../types/game';
 import '../../App.css';
 
 const GameBoard: React.FC = () => {
-  const { state, scenario, dispatch } = useGame();
+  const { state, dispatch } = useGame();
+  const scenario = state.scenario;
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;

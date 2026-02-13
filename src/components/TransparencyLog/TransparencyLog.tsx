@@ -19,11 +19,16 @@ const StreamingLogEntry: React.FC<StreamingLogEntryProps> = ({ text, shouldStrea
   // If not streaming, show full text immediately
   const finalText = shouldStream ? displayedText : text;
 
+  // Parse [Wise] prefix from text if it exists
+  const wiseMatch = finalText.match(/^\[Wise\]\s*/);
+  const prefix = wiseMatch ? wiseMatch[0] : '';
+  const content = wiseMatch ? finalText.substring(prefix.length) : finalText;
+
   return (
     <div className="log-entry">
-      <span className="log-prefix">[Wise]</span>
+      {prefix && <span className="log-prefix">{prefix}</span>}
       <span className="log-text">
-        {finalText}
+        {content}
         {shouldStream && isTyping && <span className="typing-cursor">▊</span>}
       </span>
     </div>

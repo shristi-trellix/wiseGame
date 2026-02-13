@@ -33,28 +33,64 @@ const generateAlerts = (count: number) => {
   }));
 };
 
+interface ScenarioAlert {
+  id: string;
+  scenarioFile: string;
+  type: string;
+  severity: 'High' | 'Critical';
+  host: string;
+  time: string;
+  icon: string;
+  position: { x: string; y: string };
+}
+
 const SOCOverview: React.FC = () => {
-  const { dispatch } = useGame();
+  const { dispatch, setScenario } = useGame();
   const [hoveredAlert, setHoveredAlert] = useState<string | null>(null);
   const [isZooming, setIsZooming] = useState(false);
   const alerts = React.useMemo(() => generateAlerts(500), []);
 
-  // The David Squiller alert (positioned in the middle-ish area)
-  const davidAlert = {
-    id: 'david-squiller-alert',
-    type: 'WINDOWS METHODOLOGY [Powershell DownloadFile]',
-    severity: 'Medium',
-    host: 'dsquiller-finance-pc',
-    time: '14:23',
-  };
+  // Scenario alerts configuration
+  const scenarioAlerts: ScenarioAlert[] = [
+    {
+      id: 'david-squiller-alert',
+      scenarioFile: '/scenario-david-squiller.json',
+      type: 'WINDOWS METHODOLOGY [Powershell DownloadFile]',
+      severity: 'High',
+      host: 'dsquiller-finance-pc',
+      time: '14:23',
+      icon: '👤',
+      position: { x: '75%', y: '50%' },
+    },
+    {
+      id: 'plc-hijacking-alert',
+      scenarioFile: '/scenario-plc-hijacking.json',
+      type: 'INDUSTRIAL PROTOCOL ANOMALY [Unauthorized Modbus TCP]',
+      severity: 'Critical',
+      host: 'PLC-HVAC-012',
+      time: '03:47',
+      icon: '🏭',
+      position: { x: '25%', y: '45%' },
+    },
+  ];
 
-  const handleAlertClick = (alertId: string) => {
-    if (alertId === davidAlert.id) {
-      setIsZooming(true);
-      // Wait for zoom animation, then transition to intro
+  const handleAlertClick = async (alert: ScenarioAlert) => {
+    setIsZooming(true);
+
+    // Load scenario JSON
+    try {
+      const response = await fetch(alert.scenarioFile);
+      const data = await response.json();
+
+      // Set the loaded scenario in the game context
+      setScenario(data.scenario);
+
+      // Wait for zoom animation, then start game with loaded scenario
       setTimeout(() => {
         dispatch({ type: 'START_GAME' });
       }, 1500);
+    } catch (error) {
+      console.error('Failed to load scenario:', error);
     }
   };
 
@@ -77,29 +113,35 @@ const SOCOverview: React.FC = () => {
 
       </div>
 
-      {/* David Squiller Alert Node - prominent and interactive, positioned above swarm */}
-      <div
-        className={`david-node ${hoveredAlert === davidAlert.id ? 'hovered' : ''}`}
-        style={{
-          left: '75%',
-          top: '50%',
-        }}
-        onMouseEnter={() => setHoveredAlert(davidAlert.id)}
-        onMouseLeave={() => setHoveredAlert(null)}
-        onClick={() => handleAlertClick(davidAlert.id)}
-      >
-        {hoveredAlert === davidAlert.id && (
-          <div className="alert-preview">
-            <div className="preview-header">
-              <span className="preview-badge">INVESTIGATE</span>
+      {/* Scenario Alert Nodes - prominent and interactive, positioned above swarm */}
+      {scenarioAlerts.map((alert) => (
+        <div
+          key={alert.id}
+          className={`scenario-node ${alert.severity.toLowerCase()} ${hoveredAlert === alert.id ? 'hovered' : ''}`}
+          style={{
+            left: alert.position.x,
+            top: alert.position.y,
+          }}
+          onMouseEnter={() => setHoveredAlert(alert.id)}
+          onMouseLeave={() => setHoveredAlert(null)}
+          onClick={() => handleAlertClick(alert)}
+        >
+          <div className="scenario-icon">{alert.icon}</div>
+          {hoveredAlert === alert.id && (
+            <div className="alert-preview">
+              <div className="preview-header">
+                <span className={`preview-badge ${alert.severity.toLowerCase()}`}>
+                  {alert.severity === 'Critical' ? '🚨 CRITICAL' : '⚠️ HIGH'}
+                </span>
+              </div>
+              <div className="preview-title">{alert.type}</div>
+              <div className="preview-host">Host: {alert.host}</div>
+              <div className="preview-time">Time: {alert.time}:22 UTC</div>
+              <div className="preview-action">Click to investigate with Wise →</div>
             </div>
-            <div className="preview-title">{davidAlert.type}</div>
-            <div className="preview-host">Host: {davidAlert.host}</div>
-            <div className="preview-time">Time: {davidAlert.time}:41 UTC</div>
-            <div className="preview-action">Click to investigate with Wise →</div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ))}
 
       {/* Foreground: Content Box */}
       <div className="content-box">

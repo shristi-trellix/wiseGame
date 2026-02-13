@@ -8,6 +8,20 @@
   --color-error: #FF4444;
   --color-warning: #FFA500;
 
+  /* Agent Colors (IT/Enterprise) */
+  --color-edr: #00D9FF;
+  --color-ndr: #00FF94;
+  --color-identity: #FF6B00;
+  --color-ivx: #FF00FF;
+  --color-wise: #2814FF;
+
+  /* Agent Colors (Multi-Source Telemetry) */
+  --color-splunk: #00C853;
+  --color-proxy: #FFB300;
+  --color-s3: #FF6F00;
+  --color-oracle: #D32F2F;
+  --color-otmonitor: #7B1FA2;
+
   /* Additional UI Colors */
   --color-panel-bg: #242424;
   --color-border: #333333;

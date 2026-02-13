@@ -10,7 +10,19 @@ Experience the game directly in your browser - no installation required!
 
 ## 🎮 Game Overview
 
-Deploy specialized Wise Agents (EDR, NDR, Identity, IVX) to investigate the David Squiller security incident. Build confidence through correct agent selection, save analyst time, and demonstrate the power of AI-driven security operations.
+Deploy specialized Wise Agents across two realistic attack scenarios: investigate a credential theft attack (David Squiller) or an OT/ICS PLC hijacking (Manufacturing Floor Zero). Build confidence through correct agent selection, save analyst time, and demonstrate the power of AI-driven security operations with multi-source telemetry correlation.
+
+### 🎯 Two Scenarios Available
+
+1. **David Squiller - Enterprise IT Attack** (High Severity)
+   - **Agents**: EDR, NDR, Identity, IVX (4 agents)
+   - **Attack Type**: PowerShell credential stealer with C2 communication
+   - **Time Savings**: 15.5 minutes saved through automation
+
+2. **Manufacturing Floor Zero - OT/ICS Attack** (Critical Severity)
+   - **Agents**: Splunk, S3, Oracle, OTMonitor, NDR (5 agents)
+   - **Attack Type**: PLC hijacking via Modbus TCP protocol
+   - **Time Savings**: 20 minutes saved through multi-source correlation
 
 ## 🚀 Getting Started
 
@@ -60,7 +72,8 @@ wiseGame/
 │   ├── main.tsx             # Entry point
 │   └── index.css            # Global styles (Trellix theme)
 ├── public/
-│   └── scenario-david-squiller.json  # Game scenario data
+│   ├── scenario-david-squiller.json  # David Squiller scenario
+│   └── scenario-plc-hijacking.json   # PLC hijacking scenario
 ├── .gitignore               # Git ignore rules
 ├── wrangler.toml            # Cloudflare Pages config
 └── package.json             # Dependencies
@@ -69,25 +82,35 @@ wiseGame/
 
 ### ✅ Fully Implemented & Deployed
 - ✅ **SOC Overview Screen**: Engaging start screen with 500 animated alert nodes
-- ✅ **Interactive Alert**: Hover preview and zoom animation on David Squiller alert
+- ✅ **Two Scenario Support**: Choose between IT (David Squiller) or OT (PLC Hijacking) investigations
+- ✅ **10 Agent Types**: EDR, NDR, Identity, IVX, Splunk, Proxy, S3, Oracle, OTMonitor (+ WISE as AI orchestrator)
+- ✅ **Dynamic Agent Filtering**: Each scenario shows only relevant agents (4 or 5 agents per scenario)
+- ✅ **Interactive Alerts**: Hover preview and zoom animation, severity-based colors (High vs Critical)
 - ✅ **Drag & Drop System**: Smooth agent deployment with @hello-pangea/dnd
 - ✅ **Full Game Logic**: Agent assignment, confidence scoring, time tracking
-- ✅ **6 Investigation Questions**: Linear progression with lock/unlock mechanics
-- ✅ **Answer Feedback**: Correct/incorrect validation with hints
-- ✅ **Transparency Log**: Character-by-character streaming with typing cursor
+- ✅ **6 Investigation Questions**: Linear progression with lock/unlock mechanics per scenario
+- ✅ **Answer Feedback**: Correct/incorrect validation with educational hints
+- ✅ **Transparency Log**: Character-by-character streaming with typing cursor, sequential entry queuing
 - ✅ **Investigation Guide**: Animated arrow guiding users through questions
 - ✅ **Progress Tracking**: Real-time confidence, time saved, questions answered
-- ✅ **ROI Summary**: Victory screen with automated remediation actions
+- ✅ **Timeline Replay**: Automated playback of investigation with streaming particle system
+- ✅ **ROI Summary**: Victory screen with automated remediation actions and metrics
 - ✅ **Trellix Branding**: Full brand styling with #1A1A1A and #2814FF colors
 - ✅ **Production Deployment**: Live on Cloudflare Pages with auto-deploy
 
 ### 🎮 Game Flow
-1. **SOC Overview** → View 2,847 alerts/hour, 95% false positives
-2. **Click Alert** → David Squiller investigation begins with zoom animation
-3. **Drag Agents** → Deploy EDR, NDR, Identity, IVX to answer questions
-4. **Build Confidence** → Reach 95% through correct agent selection
-5. **Execute Remediation** → See automated response actions
-6. **View ROI** → 15.5 minutes saved, 6/6 questions answered
+1. **SOC Overview** → View 2,847 alerts/hour, 95% false positives, 500 animated alert nodes
+2. **Choose Scenario** → Click David Squiller (High severity, blue) or PLC-HVAC-012 (Critical severity, red)
+3. **Investigation Begins** → Zoom animation transitions to main game
+4. **Drag Agents** → Deploy scenario-specific agents (4-5 agents shown per scenario)
+   - **David**: EDR, NDR, Identity, IVX
+   - **PLC**: Splunk, S3, Oracle, OTMonitor, NDR
+5. **Build Confidence** → Reach 95% through correct agent selection
+6. **See Wise Verdict** → Click button for Q6 final AI reasoning
+7. **Execute Remediation** → Trigger automated response actions
+8. **Timeline Replay** → Watch animated investigation timeline with streaming particles
+9. **View ROI** → David: 15.5 min saved, PLC: 20 min saved, 6/6 questions answered
+10. **Replay or Switch** → Try another scenario or replay current one
 
 ## 🎨 Design System
 
@@ -104,12 +127,19 @@ wiseGame/
 
 ## 📊 Game Mechanics
 
-- **6 Investigation Questions** in linear progression
-- **4 Specialized Agents**: EDR, NDR, Identity, IVX
+- **2 Scenarios**: David Squiller (IT/Enterprise) and Manufacturing Floor Zero (OT/ICS)
+- **6 Investigation Questions** per scenario in linear progression
+- **10 Agent Types Total** (dynamically filtered per scenario):
+  - **IT/Enterprise**: EDR (endpoint), NDR (network), Identity (IAM), IVX (sandbox)
+  - **Multi-Source Telemetry**: Splunk (SIEM), Proxy (web logs), S3 (cloud storage), Oracle (HR database), OTMonitor (OT protocols)
+  - **AI Orchestrator**: WISE (coordinates investigation, not draggable)
+- **Scenario-Specific Agents**:
+  - **David Squiller**: Shows 4 agents (EDR, NDR, Identity, IVX)
+  - **PLC Hijacking**: Shows 5 agents (Splunk, S3, Oracle, OTMonitor, NDR)
 - **Win Conditions**:
   - Reach 95% confidence score
-  - Save 12+ minutes of analyst time
-  - Answer all questions correctly
+  - Save 12+ minutes of analyst time (David: 15.5 min, PLC: 20 min)
+  - Answer all 6 questions correctly
 
 ## 🛠️ Tech Stack
 
@@ -140,18 +170,22 @@ wiseGame/
 **Phase 2: Drag & Drop + Game Logic** ✅ COMPLETE
 **Phase 3: Transparency Log Streaming** ✅ COMPLETE
 **Phase 4: SOC Overview + Deployment** ✅ COMPLETE
+**Phase 5: Timeline Replay Feature** ✅ COMPLETE
+**Phase 6: OT Scenario & Multi-Source Telemetry** ✅ COMPLETE
 
 **🌐 Production Status:**
 - ✅ Live at https://wisegame.pages.dev/
 - ✅ GitHub repository with auto-deploy
-- ✅ ~90% feature complete
-- ✅ Production-ready and playable
+- ✅ ~95% feature complete
+- ✅ Production-ready and fully playable
+- ✅ Two complete scenarios with 10 agent types
 
 **Optional Future Enhancements:**
 - Sound effects (pickup, drop, success, error sounds)
-- Additional scenarios beyond David Squiller case
+- Additional scenarios beyond David Squiller and PLC Hijacking
 - Tutorial tooltips for first-time players
 - Analytics and telemetry
+- Difficulty modes (Easy/Normal/Hard)
 
 ## 📖 Documentation
 
@@ -159,13 +193,25 @@ See [Wise Auto-investigation Product Requirements Document (1).md](./Wise%20Auto
 
 ## 🎭 Scenario Data
 
-The game uses the David Squiller case from slides 20-24 of the Wise Auto Investigation presentation, featuring:
-- File masquerading attack (19625_cutepuppyjpg.exe)
-- PowerShell credential stealer
-- C2 communication via Tor node
-- 304 brute force attempts
-- Director-level user compromise
+### Scenario 1: David Squiller (Enterprise IT Attack)
+Based on slides 20-24 of the Wise Auto Investigation presentation:
+- **Attack Type**: PowerShell credential stealer with file masquerading
+- **Malicious File**: 19625_cutepuppyjpg.exe (extension masquerading)
+- **C2 Communication**: 178.23.145.92 (Tor exit node, Gunzenhausen, Germany)
+- **Attack Pattern**: 304 brute force attempts + 33 password spray events
+- **Target**: David Squiller, Director, Sales Department
+- **Host**: dsquiller-finance-pc
+
+### Scenario 2: Manufacturing Floor Zero (OT/ICS PLC Hijacking)
+Based on Cyber4OT dataset (OT/ICS security research data):
+- **Attack Type**: PLC hijacking via Modbus TCP protocol
+- **Network**: 192.168.127.0/24 (ICS/OT network segment)
+- **Target**: PLC-HVAC-012 (slave PLC controlling HVAC systems)
+- **Protocol**: Modbus TCP (port 502)
+- **Attack Flow**: Nmap reconnaissance → macof ARP spoofing → tcpkill connection termination → PLC takeover
+- **Tools Used**: Nmap (304 port scans), macof (4,127 forged MACs), tcpkill (RST flood attacks)
+- **Data Sources**: Splunk (EDR logs), S3 (VPC flow logs), Oracle (HR database), OTMonitor (Modbus TCP), NDR (network correlation)
 
 ---
 
-Built with ❤️ for Trellix Wise demonstrations
+Built for Trellix Wise demonstrations

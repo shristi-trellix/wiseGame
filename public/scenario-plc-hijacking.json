@@ -1,0 +1,683 @@
+{
+  "scenario": {
+    "id": "plc-hijacking-manufacturing",
+    "title": "Manufacturing Floor Zero",
+    "description": "Critical infrastructure alert on industrial control systems. A PLC hijacking attempt has been detected on the manufacturing floor.",
+    "initialAlert": {
+      "title": "INDUSTRIAL PROTOCOL ANOMALY [Unauthorized Modbus TCP Connection]",
+      "host": "PLC-HVAC-012",
+      "severity": "Critical",
+      "timestamp": "2024-11-05 03:47:22 UTC",
+      "rawDetails": "Alert ID: OT-2024-11-05-90341\nSource: OT Protocol Monitor\nRule: Unauthorized Modbus TCP Session Detected\nTarget Device: PLC-HVAC-012 (Slave PLC)\nIP Address: 192.168.127.10\nNetwork Segment: ICS/OT Network (192.168.127.0/24)\nProtocol: Modbus TCP (Port 502)\n\nConnection Details:\n• Attacker IP: 192.168.127.100\n• Target PLC: 192.168.127.10 (Master PLC controlling HVAC systems)\n• Protocol: Modbus TCP Function Code 0x03 (Read Holding Registers)\n• Connection established: 2024-11-05 03:47:18 UTC\n• Anomaly: Connection does not match baseline traffic patterns\n\nSuspicious Indicators:\n⚠️ tcpkill RST packet flood detected prior to connection\n⚠️ Legitimate master connection terminated abruptly\n⚠️ New connection from unauthorized IP address\n⚠️ No prior communication history between source and target\n⚠️ Connection timing aligns with network scanning activity\n⚠️ MAC address does not match authorized OT workstations\n\nAffected Systems:\n• PLC-HVAC-012: Building HVAC control system\n• Critical infrastructure: Manufacturing floor environmental controls\n• Potential impact: Unauthorized access to industrial control logic\n\nRecommendation: Investigate immediately to determine if this is a PLC hijacking attempt or legitimate maintenance activity. Consider emergency shutdown of affected PLC if confirmed malicious."
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "order": 1,
+        "text": "What reconnaissance activity preceded this unauthorized access?",
+        "category": "Attack Preparation",
+        "locked": false,
+        "correctAgent": "Splunk",
+        "timeSaved": 3.5,
+        "answers": {
+          "Splunk": {
+            "confidence": 38,
+            "text": "Splunk EDR logs show extensive Nmap network scanning from 192.168.127.100 targeting the OT network. 304 port scans across 12 PLCs detected, including scans in Insane, Aggressive, Normal, Polite, and Sneaky modes. This systematic reconnaissance mapped the entire ICS infrastructure before the attack.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Querying Splunk index: index=edr source=sysmon host=192.168.127.100",
+              "[Wise] Searching for network reconnaissance patterns...",
+              "[Wise] Found Nmap process execution: nmap -sS -p 502 192.168.127.0/24",
+              "[Wise] Detected scan modes: Insane (T5), Aggressive (T4), Normal (T3), Polite (T2), Sneaky (T1)",
+              "[Wise] Total port scans: 304 attempts across 12 target PLCs",
+              "[Wise] Target network segment: 192.168.127.0/24 (OT infrastructure)",
+              "[Wise] Scan timing: 30 minutes prior to Modbus TCP anomaly",
+              "[Wise] Assessment: Systematic reconnaissance phase completed before attack execution"
+            ]
+          },
+          "EDR": {
+            "confidence": 25,
+            "text": "EDR shows process execution on the attacker endpoint, but without centralized log aggregation like Splunk, I cannot correlate this with the broader attack timeline or Nmap scanning patterns.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry provides centralized visibility across all endpoints for reconnaissance detection.",
+            "transparencySteps": [
+              "[Wise] Querying EDR for process creation events...",
+              "[Wise] Found process execution on endpoint 192.168.127.100",
+              "[Wise] Warning: EDR lacks centralized search across indexed logs",
+              "[Wise] Unable to correlate with broader attack campaign timeline",
+              "[Wise] Recommend: Splunk for centralized log analysis"
+            ]
+          },
+          "NDR": {
+            "confidence": 28,
+            "text": "NDR detected network scanning traffic, but without visibility into the attacker's endpoint processes (like Nmap execution), I cannot determine the reconnaissance tools used or scan configuration.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry provides process-level visibility into reconnaissance tools like Nmap.",
+            "transparencySteps": [
+              "[Wise] Analyzing NDR for network scanning patterns...",
+              "[Wise] Detected port scanning activity to port 502 (Modbus TCP)",
+              "[Wise] Multiple connection attempts across OT network segment",
+              "[Wise] Warning: Network data lacks process-level context",
+              "[Wise] Cannot identify specific reconnaissance tools used"
+            ]
+          },
+          "Identity": {
+            "confidence": 5,
+            "text": "Identity systems track user authentication, not network reconnaissance. No authentication anomalies detected for OT personnel.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry is ideal for detecting reconnaissance activity like Nmap scans.",
+            "transparencySteps": [
+              "[Wise] Querying Identity system for OT personnel authentication...",
+              "[Wise] No unusual login patterns detected",
+              "[Wise] Warning: Identity does not monitor network scanning activity"
+            ]
+          },
+          "IVX": {
+            "confidence": 8,
+            "text": "IVX sandbox analyzes file behavior, not network reconnaissance. No files have been submitted for analysis related to this incident.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry is ideal for detecting reconnaissance activity like Nmap scans.",
+            "transparencySteps": [
+              "[Wise] Checking IVX sandbox for related file submissions...",
+              "[Wise] No files submitted for analysis",
+              "[Wise] Warning: IVX does not monitor network reconnaissance"
+            ]
+          },
+          "WISE": {
+            "confidence": 22,
+            "text": "AI reasoning can correlate multiple data sources, but without indexed telemetry, I cannot identify the specific reconnaissance tools or scan patterns used in the attack preparation phase.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry provides the granular process execution data needed for reconnaissance detection.",
+            "transparencySteps": [
+              "[Wise] Analyzing available data sources for reconnaissance indicators...",
+              "[Wise] Network scanning detected, but process-level context missing",
+              "[Wise] Recommend: Splunk for centralized EDR log analysis"
+            ]
+          },
+          "Proxy": {
+            "confidence": 10,
+            "text": "Web proxy logs track HTTP/HTTPS traffic, not Modbus TCP or network scanning activity on OT networks.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry is ideal for detecting reconnaissance activity like Nmap scans.",
+            "transparencySteps": [
+              "[Wise] Querying proxy logs for web traffic from 192.168.127.100...",
+              "[Wise] Warning: OT networks typically do not route through web proxies",
+              "[Wise] Recommend: Splunk for OT-focused telemetry"
+            ]
+          },
+          "S3": {
+            "confidence": 12,
+            "text": "S3 VPC flow logs show network connections, but lack process-level detail like which tool was used (Nmap) or scan configuration parameters.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry provides process-level visibility into reconnaissance tools.",
+            "transparencySteps": [
+              "[Wise] Analyzing VPC flow logs in S3 bucket: s3://security-logs-prod/vpc-flow-logs/...",
+              "[Wise] Found multiple connection attempts from 192.168.127.100",
+              "[Wise] Warning: Flow logs lack process execution context",
+              "[Wise] Cannot determine reconnaissance tools used"
+            ]
+          },
+          "Oracle": {
+            "confidence": 8,
+            "text": "Oracle HR database tracks employee data and OT personnel authorization, not network reconnaissance or scanning activity.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry is ideal for detecting reconnaissance activity like Nmap scans.",
+            "transparencySteps": [
+              "[Wise] Querying Oracle database for OT personnel access history...",
+              "[Wise] Warning: HR database does not monitor network scanning",
+              "[Wise] Recommend: Splunk for reconnaissance detection"
+            ]
+          },
+          "OTMonitor": {
+            "confidence": 18,
+            "text": "OT Monitor detected the port scanning on Modbus TCP port 502, but cannot identify the attacker's endpoint processes or reconnaissance tools used.",
+            "isCorrect": false,
+            "hint": "Splunk's indexed EDR telemetry provides the process-level context needed to identify Nmap and scan configuration.",
+            "transparencySteps": [
+              "[Wise] Analyzing OT protocol monitoring for scanning patterns...",
+              "[Wise] Detected Modbus TCP port scans across OT network",
+              "[Wise] Warning: OT Monitor focuses on protocol-level activity",
+              "[Wise] Cannot determine endpoint processes or tools used"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q2",
+        "order": 2,
+        "text": "What network anomalies indicate MAC spoofing?",
+        "category": "Attack Positioning",
+        "locked": true,
+        "correctAgent": "S3",
+        "timeSaved": 4,
+        "answers": {
+          "S3": {
+            "confidence": 14,
+            "text": "VPC flow logs in S3 reveal massive ARP anomalies: 4,127 forged MAC addresses at 1,200 ARP requests/second from 192.168.127.100. This is the macof tool flooding the network with fake MAC addresses to poison ARP tables and position the attacker for the PLC hijacking attack.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Analyzing VPC flow logs: s3://security-logs-prod/vpc-flow-logs/2024/11/05/",
+              "[Wise] Searching for ARP-related anomalies in flow records...",
+              "[Wise] Found: 4,127 unique source MAC addresses from single IP (192.168.127.100)",
+              "[Wise] ARP request rate: 1,200 requests per second (normal baseline: 10/sec)",
+              "[Wise] Pattern matches macof tool signature (MAC address flooding)",
+              "[Wise] Effect: ARP table poisoning on OT network switches",
+              "[Wise] Timing: ARP flood occurred 10 minutes before PLC connection anomaly",
+              "[Wise] Assessment: Attacker positioned for man-in-the-middle attack on PLC communications"
+            ]
+          },
+          "NDR": {
+            "confidence": 65,
+            "text": "NDR detected the ARP flooding, but without cloud-native flow log aggregation like S3, I cannot provide the detailed MAC address count (4,127 forged MACs) or request rate analysis (1,200/sec).",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide comprehensive MAC address and ARP analysis at cloud scale.",
+            "transparencySteps": [
+              "[Wise] Analyzing NDR for ARP anomalies...",
+              "[Wise] Detected ARP flooding from 192.168.127.100",
+              "[Wise] Warning: NDR lacks cloud-scale flow log aggregation",
+              "[Wise] Recommend: S3 VPC flow logs for detailed MAC spoofing analysis"
+            ]
+          },
+          "Splunk": {
+            "confidence": 18,
+            "text": "Splunk can ingest network logs, but VPC flow logs are natively stored in S3 and optimized for network flow analysis. Splunk doesn't have the granular ARP traffic details needed for MAC spoofing detection.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs are optimized for network flow analysis and MAC address tracking.",
+            "transparencySteps": [
+              "[Wise] Querying Splunk for network anomalies...",
+              "[Wise] Warning: VPC flow logs natively stored in S3, not indexed in Splunk",
+              "[Wise] Recommend: S3 for native cloud network flow analysis"
+            ]
+          },
+          "EDR": {
+            "confidence": 10,
+            "text": "EDR monitors endpoint processes, not network-level MAC addresses or ARP traffic.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide network-level MAC address and ARP analysis.",
+            "transparencySteps": [
+              "[Wise] EDR focuses on endpoint telemetry, not network layer 2 traffic",
+              "[Wise] Recommend: S3 VPC flow logs for MAC spoofing detection"
+            ]
+          },
+          "Identity": {
+            "confidence": 5,
+            "text": "Identity systems track user authentication, not network MAC addresses or ARP traffic.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide network-level MAC address and ARP analysis.",
+            "transparencySteps": [
+              "[Wise] Identity system does not monitor network layer 2 traffic",
+              "[Wise] Recommend: S3 VPC flow logs for MAC spoofing detection"
+            ]
+          },
+          "IVX": {
+            "confidence": 5,
+            "text": "IVX sandbox analyzes file behavior, not network MAC addresses or ARP traffic.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide network-level MAC address and ARP analysis.",
+            "transparencySteps": [
+              "[Wise] IVX sandbox does not monitor network traffic",
+              "[Wise] Recommend: S3 VPC flow logs for MAC spoofing detection"
+            ]
+          },
+          "WISE": {
+            "confidence": 20,
+            "text": "AI reasoning can identify MAC spoofing patterns, but without access to VPC flow logs in S3, I cannot quantify the specific forged MAC count or ARP request rate.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide the detailed flow data needed for MAC spoofing analysis.",
+            "transparencySteps": [
+              "[Wise] Analyzing available network data for MAC anomalies...",
+              "[Wise] Warning: Need VPC flow logs from S3 for detailed analysis",
+              "[Wise] Recommend: S3 for cloud-native network flow analysis"
+            ]
+          },
+          "Proxy": {
+            "confidence": 5,
+            "text": "Web proxy logs track HTTP/HTTPS traffic, not layer 2 ARP or MAC address activity.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide network-level MAC address and ARP analysis.",
+            "transparencySteps": [
+              "[Wise] Proxy logs do not contain layer 2 network traffic",
+              "[Wise] Recommend: S3 VPC flow logs for MAC spoofing detection"
+            ]
+          },
+          "Oracle": {
+            "confidence": 5,
+            "text": "Oracle HR database tracks employee data, not network MAC addresses or ARP traffic.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide network-level MAC address and ARP analysis.",
+            "transparencySteps": [
+              "[Wise] HR database does not monitor network traffic",
+              "[Wise] Recommend: S3 VPC flow logs for MAC spoofing detection"
+            ]
+          },
+          "OTMonitor": {
+            "confidence": 22,
+            "text": "OT Monitor detected ARP anomalies on the OT network, but lacks the cloud-scale aggregation and flow log detail provided by S3 to quantify the 4,127 forged MAC addresses.",
+            "isCorrect": false,
+            "hint": "S3 VPC flow logs provide comprehensive cloud-scale network flow analysis.",
+            "transparencySteps": [
+              "[Wise] Analyzing OT network for ARP anomalies...",
+              "[Wise] Detected ARP flooding activity",
+              "[Wise] Warning: OT Monitor lacks cloud-scale flow log aggregation",
+              "[Wise] Recommend: S3 for detailed VPC flow analysis"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q3",
+        "order": 3,
+        "text": "Who has legitimate access to this OT segment?",
+        "category": "Access Authorization",
+        "locked": true,
+        "correctAgent": "Oracle",
+        "timeSaved": 2.5,
+        "answers": {
+          "Oracle": {
+            "confidence": 13,
+            "text": "Oracle HR database shows only 3 authorized OT Operations personnel have legitimate access to the 192.168.127.0/24 network: Sarah Chen (OT Engineer), Mike Rodriguez (PLC Programmer), and Lisa Park (SCADA Administrator). The attacker IP 192.168.127.100 does not match any authorized workstation in the HR system's OT access control list.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Executing Oracle query: SELECT employee_name, workstation_ip, access_level FROM hr_employees WHERE department='OT Operations'",
+              "[Wise] Found 3 authorized OT personnel:",
+              "[Wise] • Sarah Chen (OT Engineer) - Workstation: 192.168.127.50",
+              "[Wise] • Mike Rodriguez (PLC Programmer) - Workstation: 192.168.127.51",
+              "[Wise] • Lisa Park (SCADA Administrator) - Workstation: 192.168.127.52",
+              "[Wise] Cross-referencing attacker IP 192.168.127.100 against authorized list...",
+              "[Wise] Result: IP 192.168.127.100 NOT FOUND in OT access control list",
+              "[Wise] Assessment: Unauthorized access attempt from unknown endpoint"
+            ]
+          },
+          "Identity": {
+            "confidence": 68,
+            "text": "Identity systems show Active Directory OT group memberships, but without HR database integration like Oracle, I cannot map authorized personnel to specific workstation IP addresses or validate the attacker's endpoint.",
+            "isCorrect": false,
+            "hint": "Oracle HR database integrates employee data with network access control lists and workstation IPs.",
+            "transparencySteps": [
+              "[Wise] Querying Active Directory for OT Operations group members...",
+              "[Wise] Found 3 users in OT Operations AD group",
+              "[Wise] Warning: Identity lacks workstation IP mapping",
+              "[Wise] Recommend: Oracle HR database for access control validation"
+            ]
+          },
+          "Splunk": {
+            "confidence": 15,
+            "text": "Splunk can log authentication events, but doesn't maintain the authoritative HR employee database with OT access control lists that Oracle provides.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] Searching Splunk logs for OT authentication events...",
+              "[Wise] Warning: Splunk logs activity but lacks HR master data",
+              "[Wise] Recommend: Oracle for authoritative employee and access data"
+            ]
+          },
+          "EDR": {
+            "confidence": 10,
+            "text": "EDR monitors endpoint activity but doesn't contain HR employee data or OT access authorization lists.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] EDR does not maintain employee access control data",
+              "[Wise] Recommend: Oracle HR database for OT authorization verification"
+            ]
+          },
+          "NDR": {
+            "confidence": 12,
+            "text": "NDR sees network traffic from the attacker IP, but doesn't know which employees are authorized for OT access or their assigned workstations.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] NDR detects traffic but lacks employee authorization data",
+              "[Wise] Recommend: Oracle HR database for access control verification"
+            ]
+          },
+          "IVX": {
+            "confidence": 5,
+            "text": "IVX sandbox analyzes file behavior, not employee access authorization or HR data.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] IVX does not contain HR or access control data",
+              "[Wise] Recommend: Oracle HR database for OT authorization"
+            ]
+          },
+          "WISE": {
+            "confidence": 18,
+            "text": "AI reasoning can validate access patterns, but without the Oracle HR database, I cannot identify the specific authorized OT personnel or their workstation IPs.",
+            "isCorrect": false,
+            "hint": "Oracle HR database provides the authoritative employee and access control data needed for validation.",
+            "transparencySteps": [
+              "[Wise] Analyzing access authorization patterns...",
+              "[Wise] Warning: Need Oracle HR database for authoritative employee data",
+              "[Wise] Recommend: Oracle for OT personnel and workstation validation"
+            ]
+          },
+          "Proxy": {
+            "confidence": 5,
+            "text": "Web proxy logs track HTTP/HTTPS traffic, not employee HR data or OT access authorization.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] Proxy logs do not contain employee authorization data",
+              "[Wise] Recommend: Oracle HR database for OT access verification"
+            ]
+          },
+          "S3": {
+            "confidence": 8,
+            "text": "S3 VPC flow logs show network traffic patterns but don't contain HR employee data or access authorization lists.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] S3 flow logs do not include HR or access control data",
+              "[Wise] Recommend: Oracle HR database for employee verification"
+            ]
+          },
+          "OTMonitor": {
+            "confidence": 15,
+            "text": "OT Monitor tracks protocol activity on the ICS network but doesn't maintain the HR employee database or OT access control lists.",
+            "isCorrect": false,
+            "hint": "Oracle HR database is the authoritative source for employee access control and OT authorization.",
+            "transparencySteps": [
+              "[Wise] OT Monitor focuses on protocol behavior, not employee data",
+              "[Wise] Recommend: Oracle HR database for OT personnel authorization"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q4",
+        "order": 4,
+        "text": "Is this Modbus TCP connection legitimate?",
+        "category": "Protocol Analysis",
+        "locked": true,
+        "correctAgent": "OTMonitor",
+        "timeSaved": 5,
+        "answers": {
+          "OTMonitor": {
+            "confidence": 12,
+            "text": "NO - This is a hijacked connection. OT Monitor's protocol analysis reveals tcpkill tool signatures: RST flood with modes -3, -5, and -9 terminated the legitimate master PLC connection, followed by a rogue Modbus TCP session from the attacker. Function code 0x03 (Read Holding Registers) was used to extract PLC configuration and logic.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Parsing Modbus TCP traffic on port 502...",
+              "[Wise] Analyzing connection sequence to PLC-HVAC-012 (192.168.127.10)...",
+              "[Wise] Detected tcpkill RST packets: modes -3 (3 RST), -5 (5 RST), -9 (9 RST)",
+              "[Wise] Legitimate master connection (192.168.127.5) terminated at 03:47:15 UTC",
+              "[Wise] Rogue connection established from 192.168.127.100 at 03:47:18 UTC",
+              "[Wise] Modbus function code analysis: 0x03 (Read Holding Registers)",
+              "[Wise] Registers accessed: 0x0000-0x00FF (PLC configuration and control logic)",
+              "[Wise] Cross-referencing with baseline traffic: Connection does not match authorized patterns",
+              "[Wise] Verdict: PLC hijacking attack using tcpkill to terminate legitimate session"
+            ]
+          },
+          "NDR": {
+            "confidence": 55,
+            "text": "NDR detected the connection and saw RST packets, but without industrial protocol parsing like OT Monitor, I cannot determine if this is legitimate Modbus TCP communication or a tcpkill hijacking attempt.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing (Modbus TCP, DNP3) and can detect tcpkill attack signatures.",
+            "transparencySteps": [
+              "[Wise] Analyzing network traffic to PLC-HVAC-012...",
+              "[Wise] Detected TCP RST packets and new connection establishment",
+              "[Wise] Warning: NDR lacks industrial protocol parsing capabilities",
+              "[Wise] Cannot determine Modbus TCP function codes or register access",
+              "[Wise] Recommend: OT Monitor for industrial protocol analysis"
+            ]
+          },
+          "Splunk": {
+            "confidence": 20,
+            "text": "Splunk logs may contain network events, but without OT Monitor's industrial protocol parsing, I cannot analyze Modbus TCP function codes or detect tcpkill attack signatures.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing and OT-specific attack detection.",
+            "transparencySteps": [
+              "[Wise] Searching Splunk for Modbus TCP events...",
+              "[Wise] Warning: Splunk lacks industrial protocol parsing capabilities",
+              "[Wise] Recommend: OT Monitor for Modbus TCP analysis"
+            ]
+          },
+          "EDR": {
+            "confidence": 15,
+            "text": "EDR monitors endpoint processes but doesn't parse industrial protocols like Modbus TCP or detect OT-specific attacks like tcpkill hijacking.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing and OT attack detection.",
+            "transparencySteps": [
+              "[Wise] EDR focuses on endpoint telemetry, not OT protocol analysis",
+              "[Wise] Recommend: OT Monitor for Modbus TCP connection validation"
+            ]
+          },
+          "Identity": {
+            "confidence": 5,
+            "text": "Identity systems track user authentication, not Modbus TCP protocol legitimacy or PLC communication patterns.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing and OT attack detection.",
+            "transparencySteps": [
+              "[Wise] Identity system does not analyze industrial protocols",
+              "[Wise] Recommend: OT Monitor for Modbus TCP analysis"
+            ]
+          },
+          "IVX": {
+            "confidence": 8,
+            "text": "IVX sandbox analyzes file behavior, not live Modbus TCP traffic or PLC communication patterns.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing and OT attack detection.",
+            "transparencySteps": [
+              "[Wise] IVX analyzes files, not industrial protocol traffic",
+              "[Wise] Recommend: OT Monitor for Modbus TCP connection analysis"
+            ]
+          },
+          "WISE": {
+            "confidence": 25,
+            "text": "AI reasoning can detect anomalies, but without OT Monitor's protocol parser, I cannot analyze Modbus function codes or identify tcpkill attack signatures in the traffic.",
+            "isCorrect": false,
+            "hint": "OT Monitor provides the industrial protocol parsing needed to validate Modbus TCP connections.",
+            "transparencySteps": [
+              "[Wise] Analyzing available data for connection legitimacy...",
+              "[Wise] Warning: Need OT Monitor for Modbus TCP protocol analysis",
+              "[Wise] Recommend: OT Monitor for industrial protocol validation"
+            ]
+          },
+          "Proxy": {
+            "confidence": 5,
+            "text": "Web proxy logs track HTTP/HTTPS traffic, not Modbus TCP or industrial control protocols.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing and OT attack detection.",
+            "transparencySteps": [
+              "[Wise] Proxy logs do not contain Modbus TCP traffic",
+              "[Wise] Recommend: OT Monitor for OT protocol analysis"
+            ]
+          },
+          "S3": {
+            "confidence": 18,
+            "text": "S3 VPC flow logs show TCP connections on port 502, but lack the application-layer protocol parsing needed to analyze Modbus function codes or detect tcpkill attacks.",
+            "isCorrect": false,
+            "hint": "OT Monitor provides deep packet inspection for industrial protocols like Modbus TCP.",
+            "transparencySteps": [
+              "[Wise] Analyzing S3 flow logs for port 502 traffic...",
+              "[Wise] Warning: Flow logs lack application-layer protocol parsing",
+              "[Wise] Recommend: OT Monitor for Modbus TCP deep packet inspection"
+            ]
+          },
+          "Oracle": {
+            "confidence": 5,
+            "text": "Oracle HR database tracks employee data, not industrial protocol traffic or PLC communication patterns.",
+            "isCorrect": false,
+            "hint": "OT Monitor specializes in industrial protocol parsing and OT attack detection.",
+            "transparencySteps": [
+              "[Wise] HR database does not analyze industrial protocols",
+              "[Wise] Recommend: OT Monitor for Modbus TCP analysis"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q5",
+        "order": 5,
+        "text": "What's the attack scope across the OT network?",
+        "category": "Lateral Impact",
+        "locked": true,
+        "correctAgent": "NDR",
+        "timeSaved": 3,
+        "answers": {
+          "NDR": {
+            "confidence": 10,
+            "text": "NDR correlation reveals this is a coordinated multi-PLC attack: 12 PLCs across the manufacturing floor were targeted, with 7 showing anomalous Modbus TCP traffic patterns. All affected systems control critical HVAC, conveyor, and assembly line operations. The attacker has positioned for widespread industrial control compromise.",
+            "isCorrect": true,
+            "transparencySteps": [
+              "[Wise] Querying NDR for network-wide Modbus TCP activity...",
+              "[Wise] Correlating traffic from attacker IP 192.168.127.100...",
+              "[Wise] Found connections to 12 target PLCs on 192.168.127.0/24 network",
+              "[Wise] PLCs with anomalous traffic: 7 of 12 (58%)",
+              "[Wise] Affected systems:",
+              "[Wise] • PLC-HVAC-012: Building environmental controls",
+              "[Wise] • PLC-CONV-003: Conveyor belt systems",
+              "[Wise] • PLC-ASSY-007: Assembly line robot controllers",
+              "[Wise] • 4 additional PLCs with partial compromise indicators",
+              "[Wise] Network correlation complete: Coordinated multi-target attack campaign"
+            ]
+          },
+          "OTMonitor": {
+            "confidence": 60,
+            "text": "OT Monitor detected anomalous Modbus traffic on multiple PLCs, but without NDR's network-wide correlation, I cannot quantify the exact scope (12 PLCs targeted, 7 compromised) or map the full attack campaign.",
+            "isCorrect": false,
+            "hint": "NDR provides network-wide correlation to map the full scope of multi-PLC attacks.",
+            "transparencySteps": [
+              "[Wise] Analyzing OT protocol traffic for anomalies...",
+              "[Wise] Detected suspicious Modbus TCP activity on multiple PLCs",
+              "[Wise] Warning: OT Monitor lacks network-wide correlation capabilities",
+              "[Wise] Recommend: NDR for network-wide attack scope analysis"
+            ]
+          },
+          "Splunk": {
+            "confidence": 25,
+            "text": "Splunk logs show events from multiple endpoints, but without NDR's network correlation engine, I cannot map the full attack scope across 12 PLCs or identify the 7 compromised systems.",
+            "isCorrect": false,
+            "hint": "NDR specializes in network-wide correlation and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] Searching Splunk for events related to 192.168.127.100...",
+              "[Wise] Warning: Splunk lacks real-time network correlation engine",
+              "[Wise] Recommend: NDR for network-wide attack scope mapping"
+            ]
+          },
+          "EDR": {
+            "confidence": 15,
+            "text": "EDR monitors individual endpoints but cannot correlate network-wide PLC compromise or map lateral movement across the OT infrastructure.",
+            "isCorrect": false,
+            "hint": "NDR specializes in network-wide correlation and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] EDR focuses on single-endpoint telemetry",
+              "[Wise] Recommend: NDR for network-wide attack correlation"
+            ]
+          },
+          "Identity": {
+            "confidence": 5,
+            "text": "Identity systems track user authentication, not network-wide PLC compromise or OT attack scope.",
+            "isCorrect": false,
+            "hint": "NDR specializes in network-wide correlation and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] Identity system does not monitor network-wide attacks",
+              "[Wise] Recommend: NDR for attack scope analysis"
+            ]
+          },
+          "IVX": {
+            "confidence": 5,
+            "text": "IVX sandbox analyzes file behavior, not network-wide PLC compromise or lateral movement.",
+            "isCorrect": false,
+            "hint": "NDR specializes in network-wide correlation and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] IVX does not monitor network infrastructure",
+              "[Wise] Recommend: NDR for network-wide attack scope"
+            ]
+          },
+          "WISE": {
+            "confidence": 22,
+            "text": "AI reasoning can identify attack patterns, but without NDR's network correlation engine, I cannot quantify the exact scope (12 PLCs targeted, 7 compromised) or map lateral movement.",
+            "isCorrect": false,
+            "hint": "NDR provides the network correlation engine needed for attack scope analysis.",
+            "transparencySteps": [
+              "[Wise] Analyzing available data for attack scope...",
+              "[Wise] Warning: Need NDR for network-wide correlation",
+              "[Wise] Recommend: NDR for lateral movement and scope mapping"
+            ]
+          },
+          "Proxy": {
+            "confidence": 5,
+            "text": "Web proxy logs track HTTP/HTTPS traffic, not Modbus TCP or OT network lateral movement.",
+            "isCorrect": false,
+            "hint": "NDR specializes in network-wide correlation and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] Proxy logs do not monitor OT network traffic",
+              "[Wise] Recommend: NDR for OT attack scope analysis"
+            ]
+          },
+          "S3": {
+            "confidence": 20,
+            "text": "S3 VPC flow logs contain connection data, but without NDR's correlation engine, I cannot map the full attack scope across 12 PLCs or identify the 7 compromised systems.",
+            "isCorrect": false,
+            "hint": "NDR provides real-time correlation for network-wide attack scope analysis.",
+            "transparencySteps": [
+              "[Wise] Analyzing S3 flow logs for connections from 192.168.127.100...",
+              "[Wise] Warning: Flow logs lack real-time correlation engine",
+              "[Wise] Recommend: NDR for network-wide attack correlation"
+            ]
+          },
+          "Oracle": {
+            "confidence": 5,
+            "text": "Oracle HR database tracks employee data, not network-wide PLC compromise or attack scope.",
+            "isCorrect": false,
+            "hint": "NDR specializes in network-wide correlation and lateral movement detection.",
+            "transparencySteps": [
+              "[Wise] HR database does not monitor network attacks",
+              "[Wise] Recommend: NDR for attack scope analysis"
+            ]
+          }
+        }
+      },
+      {
+        "id": "q6",
+        "order": 6,
+        "text": "Should we trigger emergency PLC shutdown?",
+        "category": "Remediation Decision",
+        "locked": true,
+        "correctAgent": "WISE",
+        "timeSaved": 2,
+        "isDecision": true,
+        "answers": {
+          "WISE": {
+            "confidence": 8,
+            "text": "YES - EMERGENCY SHUTDOWN REQUIRED. The evidence is conclusive: (1) Nmap reconnaissance mapped 304 PLC targets, (2) macof ARP poisoning with 4,127 forged MACs positioned attacker, (3) Unauthorized attacker workstation (not in Oracle OT access list), (4) tcpkill hijacked legitimate PLC connection, (5) 12 PLCs targeted with 7 showing compromise indicators. This is an active ICS attack with potential for physical damage to manufacturing operations. Immediate isolation and shutdown required.",
+            "isCorrect": true,
+            "decision": "SHUTDOWN",
+            "remediationActions": [
+              "Trigger emergency shutdown for all 7 compromised PLCs",
+              "Isolate attacker IP 192.168.127.100 at OT network firewall",
+              "Disable network port for unauthorized endpoint",
+              "Initiate forensic capture of PLC configurations and ladder logic",
+              "Review and restore PLC firmware from golden images",
+              "Implement network segmentation between IT and OT networks",
+              "Notify plant operations and safety teams immediately"
+            ],
+            "transparencySteps": [
+              "[Wise] Synthesizing all investigation findings...",
+              "[Wise] Attack phase 1: Reconnaissance - Nmap scanned 304 PLC targets across OT network",
+              "[Wise] Attack phase 2: Positioning - macof flooded 4,127 forged MAC addresses for ARP poisoning",
+              "[Wise] Attack phase 3: Authorization - Attacker workstation not in Oracle OT access control list",
+              "[Wise] Attack phase 4: Hijacking - tcpkill RST flood terminated legitimate PLC master connection",
+              "[Wise] Attack phase 5: Compromise - 12 PLCs targeted, 7 showing anomalous Modbus TCP activity",
+              "[Wise] Impact assessment: Critical infrastructure at risk - HVAC, conveyors, assembly lines",
+              "[Wise] Threat level: CRITICAL - Active ICS attack with physical safety implications",
+              "[Wise] RECOMMENDATION: Emergency PLC shutdown and network isolation required immediately"
+            ]
+          }
+        }
+      }
+    ],
+    "winConditions": {
+      "minConfidenceScore": 95,
+      "minTimeSaved": 20,
+      "allQuestionsAnswered": true
+    },
+    "metrics": {
+      "totalQuestions": 6,
+      "totalTimeSavingsPossible": 20,
+      "perfectPlaytimeTarget": 60
+    }
+  }
+}

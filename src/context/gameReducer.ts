@@ -1,6 +1,7 @@
 import { GameState, GameAction } from '../types/game';
 
 export const initialGameState: GameState = {
+  scenario: null,
   currentQuestionId: null,
   completedQuestions: [],
   agentAssignments: {},
@@ -15,6 +16,12 @@ export const initialGameState: GameState = {
 
 export const gameReducer = (state: GameState, action: GameAction): GameState => {
   switch (action.type) {
+    case 'SET_SCENARIO':
+      return {
+        ...state,
+        scenario: action.payload,
+      };
+
     case 'START_GAME':
       return {
         ...state,

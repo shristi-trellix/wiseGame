@@ -67,22 +67,30 @@
   box-shadow: 0 0 8px rgba(255, 68, 68, 0.3);
 }
 
-/* David Squiller Alert Node - Special Styling */
-.david-node {
+/* Scenario Alert Nodes - Special Styling */
+.scenario-node {
   position: fixed;
   width: 40px;
   height: 40px;
-  background: var(--color-agent-glow);
   border-radius: 50%;
-  box-shadow: 0 0 40px rgba(40, 20, 255, 1), 0 0 80px rgba(40, 20, 255, 0.8), 0 0 120px rgba(40, 20, 255, 0.6);
-  animation: davidPulse 1.5s ease-in-out infinite;
   cursor: pointer;
   pointer-events: all;
   z-index: 1000;
   transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
 }
 
-@keyframes davidPulse {
+/* High Severity (David Squiller) - Blue Glow */
+.scenario-node.high {
+  background: var(--color-agent-glow);
+  box-shadow: 0 0 40px rgba(40, 20, 255, 1), 0 0 80px rgba(40, 20, 255, 0.8), 0 0 120px rgba(40, 20, 255, 0.6);
+  animation: highPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes highPulse {
   0%, 100% {
     box-shadow: 0 0 40px rgba(40, 20, 255, 1), 0 0 80px rgba(40, 20, 255, 0.8), 0 0 120px rgba(40, 20, 255, 0.6);
     transform: translate(-50%, -50%) scale(1);
@@ -95,13 +103,40 @@
   }
 }
 
-.david-node:hover {
+.scenario-node.high:hover {
   transform: translate(-50%, -50%) scale(1.5);
   box-shadow: 0 0 80px rgba(40, 20, 255, 1), 0 0 160px rgba(40, 20, 255, 1), 0 0 240px rgba(40, 20, 255, 0.8);
   animation-play-state: paused;
 }
 
-.david-node.hovered {
+/* Critical Severity (PLC Hijacking) - Red Glow */
+.scenario-node.critical {
+  background: var(--color-error);
+  box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.8), 0 0 120px rgba(255, 68, 68, 0.6);
+  animation: criticalPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.8), 0 0 120px rgba(255, 68, 68, 0.6);
+    transform: translate(-50%, -50%) scale(1);
+    background: var(--color-error);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(255, 68, 68, 1), 0 0 120px rgba(255, 68, 68, 1), 0 0 180px rgba(255, 68, 68, 0.8);
+    transform: translate(-50%, -50%) scale(1.3);
+    background: rgba(255, 68, 68, 1);
+  }
+}
+
+.scenario-node.critical:hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  box-shadow: 0 0 80px rgba(255, 68, 68, 1), 0 0 160px rgba(255, 68, 68, 1), 0 0 240px rgba(255, 68, 68, 0.8);
+  animation-play-state: paused;
+}
+
+/* Hovered state for both severities */
+.scenario-node.hovered {
   transform: translate(-50%, -50%) scale(1.6);
   z-index: 2000;
 }
@@ -114,14 +149,23 @@
   transform: translateX(-50%);
   margin-top: 1rem;
   background: rgba(10, 10, 10, 0.98);
-  border: 2px solid var(--color-agent-glow);
   border-radius: 8px;
   padding: 1rem;
   min-width: 300px;
-  box-shadow: 0 8px 30px rgba(40, 20, 255, 0.5);
   z-index: 10000;
   animation: slideDown 0.3s ease;
   pointer-events: none;
+}
+
+/* Preview popup border and shadow colors by severity */
+.scenario-node.high .alert-preview {
+  border: 2px solid var(--color-agent-glow);
+  box-shadow: 0 8px 30px rgba(40, 20, 255, 0.5);
+}
+
+.scenario-node.critical .alert-preview {
+  border: 2px solid var(--color-error);
+  box-shadow: 0 8px 30px rgba(255, 68, 68, 0.5);
 }
 
 @keyframes slideDown {
@@ -142,13 +186,21 @@
 .preview-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: var(--color-agent-glow);
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+/* Badge colors by severity */
+.scenario-node.high .preview-badge {
+  background: var(--color-agent-glow);
+}
+
+.scenario-node.critical .preview-badge {
+  background: var(--color-error);
 }
 
 .preview-title {
@@ -171,9 +223,17 @@
   padding-top: 0.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 0.8rem;
-  color: var(--color-agent-glow);
   font-weight: 600;
   text-align: center;
+}
+
+/* Action text color by severity */
+.scenario-node.high .preview-action {
+  color: var(--color-agent-glow);
+}
+
+.scenario-node.critical .preview-action {
+  color: var(--color-error);
 }
 
 /* Foreground Content Box */

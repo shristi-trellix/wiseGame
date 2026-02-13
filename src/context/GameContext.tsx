@@ -1,25 +1,28 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useCallback } from 'react';
 import { GameState, GameAction, Scenario } from '../types/game';
 import { gameReducer, initialGameState } from './gameReducer';
 
 interface GameContextType {
   state: GameState;
   dispatch: React.Dispatch<GameAction>;
-  scenario: Scenario | null;
+  setScenario: (scenario: Scenario) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 interface GameProviderProps {
   children: ReactNode;
-  scenario: Scenario;
 }
 
-export const GameProvider: React.FC<GameProviderProps> = ({ children, scenario }) => {
+export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
 
+  const setScenario = useCallback((scenario: Scenario) => {
+    dispatch({ type: 'SET_SCENARIO', payload: scenario });
+  }, []);
+
   return (
-    <GameContext.Provider value={{ state, dispatch, scenario }}>
+    <GameContext.Provider value={{ state, dispatch, setScenario }}>
       {children}
     </GameContext.Provider>
   );
