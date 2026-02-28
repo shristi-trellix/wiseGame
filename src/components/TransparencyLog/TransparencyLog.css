@@ -36,7 +36,7 @@
 .log-entries {
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.875rem;
-  line-height: 1.8;
+  line-height: 1.0;
   color: var(--color-text-primary);
 }
 
@@ -82,5 +82,65 @@
   50%,
   100% {
     opacity: 0;
+  }
+}
+
+/* Tablet responsiveness */
+@media (max-width: 1023px) {
+  .log-empty {
+    padding: 1.5rem;
+  }
+
+  .log-empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .log-empty-text {
+    font-size: 0.9rem;
+  }
+
+  .log-empty-subtext {
+    font-size: 0.8rem;
+  }
+
+  .log-entries {
+    font-size: 0.8rem;
+  }
+
+  .log-entry {
+    margin-bottom: 0.625rem;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .log-empty {
+    padding: 1rem;
+  }
+
+  .log-empty-icon {
+    font-size: 2rem;
+  }
+
+  .log-empty-text {
+    font-size: 0.85rem;
+  }
+
+  .log-empty-subtext {
+    font-size: 0.75rem;
+    max-width: 200px;
+  }
+
+  .log-entries {
+    font-size: 0.75rem;
+    line-height: 1.0;
+  }
+
+  .log-entry {
+    margin-bottom: 0.5rem;
+  }
+
+  .log-prefix {
+    margin-right: 0.25rem;
   }
 }

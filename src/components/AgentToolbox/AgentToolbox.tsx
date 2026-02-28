@@ -25,7 +25,7 @@ const AgentToolbox: React.FC = () => {
     if (!scenario) return [];
 
     // David Squiller scenario: only show IT/enterprise agents
-    if (scenario.id === 'david-squiller') {
+    if (scenario.id === 'david-squiller-case') {
       return allAgents.filter(agent =>
         ['EDR', 'NDR', 'Identity', 'IVX'].includes(agent.id)
       );
@@ -38,7 +38,8 @@ const AgentToolbox: React.FC = () => {
       );
     }
 
-    // Default: show all agents (shouldn't happen, but safe fallback)
+    // Default fallback: log warning and show all agents
+    console.warn(`Unknown scenario ID: ${scenario.id}. Showing all agents.`);
     return allAgents;
   }, [scenario]);
 

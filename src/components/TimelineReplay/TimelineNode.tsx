@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { TimelineEvent, AgentType } from '../../types/game';
+import { TimelineEvent } from '../../types/game';
 import { ConfidenceBar } from './ConfidenceBar';
 
 interface TimelineNodeProps {
@@ -9,22 +9,6 @@ interface TimelineNodeProps {
   isPending: boolean;
   onComplete: () => void;
 }
-
-const getAgentIcon = (agent: AgentType): string => {
-  const icons = {
-    EDR: '🖥️',
-    NDR: '🌐',
-    Identity: '👤',
-    IVX: '🔬',
-    WISE: '🧠',
-    Splunk: '🔍',
-    Proxy: '🌍',
-    S3: '☁️',
-    Oracle: '🗄️',
-    OTMonitor: '🏭',
-  };
-  return icons[agent] || '•';
-};
 
 export const TimelineNode: React.FC<TimelineNodeProps> = ({
   event,
@@ -77,17 +61,6 @@ export const TimelineNode: React.FC<TimelineNodeProps> = ({
           +{event.timeSaved} min
         </div>
       )}
-
-      {/* Agent Icon */}
-      {event.agentType ? (
-        <div className={`node-agent-icon ${event.agentType}`}>
-          {getAgentIcon(event.agentType)}
-        </div>
-      ) : event.type === 'alert' ? (
-        <div className="node-agent-icon alert-icon">
-          ⚠️
-        </div>
-      ) : null}
 
       {/* Question Text or Alert Title */}
       {event.questionText ? (

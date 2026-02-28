@@ -12,7 +12,7 @@ interface StreamingLogEntryProps {
 const StreamingLogEntry: React.FC<StreamingLogEntryProps> = ({ text, shouldStream, onComplete }) => {
   const { displayedText, isTyping } = useStreamingText({
     text: shouldStream ? text : text, // Always use full text
-    speed: shouldStream ? 30 : 0, // 30ms per character for smooth streaming
+    speed: shouldStream ? 5 : 0, // 5ms per character for fast streaming (human reading speed)
     onComplete: shouldStream ? onComplete : undefined,
   });
 
@@ -44,6 +44,18 @@ const TransparencyLog: React.FC = () => {
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [state.transparencyLog, streamingIndex]);
+
+  // Continuous autoscroll during active streaming
+  useEffect(() => {
+    const isStreaming = streamingIndex < state.transparencyLog.length;
+    if (!isStreaming) return;
+
+    const scrollInterval = setInterval(() => {
+      logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100); // Scroll every 100ms during streaming
+
+    return () => clearInterval(scrollInterval);
+  }, [streamingIndex, state.transparencyLog.length]);
 
   // Reset streaming when new batch of logs arrive
   useEffect(() => {

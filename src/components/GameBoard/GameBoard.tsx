@@ -133,7 +133,7 @@ const GameBoard: React.FC = () => {
       <div className="app">
         {/* Header */}
         <header className="app-header">
-          <h1 className="app-title">Wise Auto Investigation</h1>
+          <h1 className="app-title">Trellix Wise Auto Investigation</h1>
           <div className="app-subtitle">{scenario?.title || 'The Auto-Investigation Challenge'}</div>
         </header>
 

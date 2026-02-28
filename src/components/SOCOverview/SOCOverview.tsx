@@ -48,9 +48,21 @@ const SOCOverview: React.FC = () => {
   const { dispatch, setScenario } = useGame();
   const [hoveredAlert, setHoveredAlert] = useState<string | null>(null);
   const [isZooming, setIsZooming] = useState(false);
-  const alerts = React.useMemo(() => generateAlerts(500), []);
 
-  // Scenario alerts configuration
+  // Responsive alert count based on screen size
+  const alertCount = React.useMemo(() => {
+    const width = window.innerWidth;
+    if (width < 768) return 150; // Mobile: fewer alerts for performance
+    if (width < 1024) return 300; // Tablet: medium alert count
+    return 500; // Desktop: full alert swarm
+  }, []);
+
+  const alerts = React.useMemo(() => generateAlerts(alertCount), [alertCount]);
+
+  // Scenario alerts configuration - positioning adjusts for screen size
+  const isMobile = window.innerWidth < 768;
+  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+
   const scenarioAlerts: ScenarioAlert[] = [
     {
       id: 'david-squiller-alert',
@@ -60,7 +72,11 @@ const SOCOverview: React.FC = () => {
       host: 'dsquiller-finance-pc',
       time: '14:23',
       icon: '👤',
-      position: { x: '75%', y: '50%' },
+      position: isMobile
+        ? { x: '85%', y: '12%' }  // Mobile: top right corner, well above content
+        : isTablet
+        ? { x: '80%', y: '20%' }  // Tablet: upper right
+        : { x: '75%', y: '50%' }, // Desktop: original position
     },
     {
       id: 'plc-hijacking-alert',
@@ -70,7 +86,11 @@ const SOCOverview: React.FC = () => {
       host: 'PLC-HVAC-012',
       time: '03:47',
       icon: '🏭',
-      position: { x: '25%', y: '45%' },
+      position: isMobile
+        ? { x: '15%', y: '10%' }  // Mobile: top left corner, well above content
+        : isTablet
+        ? { x: '20%', y: '18%' }  // Tablet: upper left
+        : { x: '25%', y: '45%' }, // Desktop: original position
     },
   ];
 
@@ -173,7 +193,7 @@ const SOCOverview: React.FC = () => {
             and bring you only the ones that need your attention.
           </p>
           <p className="message-instruction">
-            <span className="magnifying-glass-icon">🔍</span> Hover over the glowing alert to see how Wise investigates each alert
+            <span className="magnifying-glass-icon">🔍</span> Hover over the glowing alert to see how Trellix Wise investigates each alert
           </p>
         </div>
       </div>
@@ -181,7 +201,7 @@ const SOCOverview: React.FC = () => {
       {isZooming && (
         <div className="zoom-overlay">
           <div className="zoom-circle"></div>
-          <div className="zoom-text">Initializing Wise Investigation...</div>
+          <div className="zoom-text">Initializing Trellix Wise Investigation...</div>
         </div>
       )}
     </div>

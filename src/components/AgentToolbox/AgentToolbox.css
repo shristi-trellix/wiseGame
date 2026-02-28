@@ -126,3 +126,66 @@
 .agents-list::-webkit-scrollbar-thumb:hover {
   background: rgba(40, 20, 255, 0.7);
 }
+
+/* Tablet responsiveness */
+@media (max-width: 1023px) {
+  .agent-card {
+    min-height: 70px;
+    padding: 0.625rem;
+  }
+
+  .agent-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .agent-name {
+    font-size: 0.75rem;
+  }
+
+  .agent-description {
+    font-size: 0.65rem;
+  }
+
+  .toolbox-instruction,
+  .toolbox-hint {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .agents-list {
+    grid-template-columns: 1fr;
+    max-height: none;
+    gap: 0.5rem;
+  }
+
+  .agent-card {
+    min-height: 60px;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .agent-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
+
+  .agent-name {
+    font-size: 0.7rem;
+  }
+
+  .agent-description {
+    font-size: 0.6rem;
+  }
+
+  .toolbox-instruction,
+  .toolbox-hint {
+    font-size: 0.7rem;
+    padding: 0.625rem;
+  }
+}

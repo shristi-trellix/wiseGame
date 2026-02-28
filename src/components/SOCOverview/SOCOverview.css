@@ -152,6 +152,7 @@
   border-radius: 8px;
   padding: 1rem;
   min-width: 300px;
+  max-width: 90vw;
   z-index: 10000;
   animation: slideDown 0.3s ease;
   pointer-events: none;
@@ -245,6 +246,7 @@
   border-radius: 16px;
   padding: 3rem 4rem;
   max-width: 900px;
+  width: 90%;
   backdrop-filter: blur(10px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
@@ -268,6 +270,7 @@
   justify-content: center;
   gap: 3rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .stat-box {
@@ -338,6 +341,148 @@
   font-size: 1.5rem;
   display: inline-block;
   margin-right: 0.5rem;
+}
+
+/* Tablet SOC Overview (768px - 1023px) */
+@media (max-width: 1023px) {
+  .content-box {
+    padding: 2rem 2.5rem;
+    width: 85%;
+  }
+
+  .soc-title {
+    font-size: 2rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .message-large {
+    font-size: 1.5rem;
+  }
+
+  .message-medium {
+    font-size: 1.25rem;
+  }
+
+  .message-question {
+    font-size: 1.4rem;
+  }
+
+  .message-solution {
+    font-size: 1.1rem;
+  }
+
+  .scenario-node {
+    width: 35px;
+    height: 35px;
+    font-size: 1.25rem;
+  }
+
+  /* Ensure alert preview doesn't overflow on tablet */
+  .alert-preview {
+    min-width: 280px;
+    max-width: 85vw;
+  }
+}
+
+/* Mobile SOC Overview (up to 767px) */
+@media (max-width: 767px) {
+  .content-box {
+    padding: 1.5rem 1.5rem;
+    width: 92%;
+    border-radius: 12px;
+  }
+
+  .soc-title {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .soc-stats {
+    gap: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+  }
+
+  .soc-message {
+    padding: 0 0.5rem;
+  }
+
+  .message-large {
+    font-size: 1.25rem;
+  }
+
+  .message-medium {
+    font-size: 1rem;
+  }
+
+  .message-question {
+    font-size: 1.1rem;
+    margin: 1rem 0;
+  }
+
+  .message-solution {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .wise-highlight {
+    font-size: 1.2em;
+  }
+
+  .message-instruction {
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+
+  .magnifying-glass-icon {
+    font-size: 1.25rem;
+  }
+
+  .scenario-node {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+
+  .alert-preview {
+    min-width: 220px;
+    max-width: 90vw;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    left: auto;
+    right: -10px;
+    transform: none;
+  }
+
+  /* Override left positioning for left-side alert on mobile */
+  .scenario-node:first-of-type .alert-preview {
+    left: -10px;
+    right: auto;
+  }
+
+  .preview-title {
+    font-size: 0.8rem;
+  }
+
+  .preview-host,
+  .preview-time {
+    font-size: 0.7rem;
+  }
 }
 
 @keyframes pulse {

@@ -27,6 +27,21 @@
   margin-top: 0.25rem;
 }
 
+/* Mobile responsiveness for header */
+@media (max-width: 767px) {
+  .app-header {
+    padding: 1rem;
+  }
+
+  .app-title {
+    font-size: 1.25rem;
+  }
+
+  .app-subtitle {
+    font-size: 0.75rem;
+  }
+}
+
 .game-container {
   flex: 1;
   display: flex;
@@ -62,22 +77,75 @@
   padding: 1.5rem;
 }
 
-/* Left panel - 25% */
+/* Desktop layout - Left panel - 25% */
 .agent-toolbox-panel {
   width: 25%;
   min-width: 280px;
 }
 
-/* Center panel - 50% */
+/* Desktop layout - Center panel - 50% */
 .investigation-panel {
   width: 50%;
   flex: 1;
 }
 
-/* Right panel - 25% */
+/* Desktop layout - Right panel - 25% */
 .transparency-panel {
   width: 25%;
   min-width: 300px;
+}
+
+/* Tablet layout (768px - 1023px) */
+@media (max-width: 1023px) {
+  .game-container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .panel {
+    width: 100% !important;
+    min-width: unset !important;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    max-height: none;
+    min-height: 300px;
+  }
+
+  .panel:last-child {
+    border-bottom: none;
+  }
+
+  .panel-content {
+    padding: 1rem;
+    max-height: 500px;
+  }
+
+  /* Investigation panel should be larger on tablet */
+  .investigation-panel .panel-content {
+    max-height: 600px;
+  }
+}
+
+/* Mobile layout (up to 767px) */
+@media (max-width: 767px) {
+  .panel-header {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .panel-content {
+    padding: 0.75rem;
+    max-height: 400px;
+  }
+
+  .panel {
+    min-height: 250px;
+  }
+
+  /* Investigation panel gets more space on mobile */
+  .investigation-panel .panel-content {
+    max-height: 500px;
+  }
 }
 
 /* Progress indicators */
@@ -89,6 +157,7 @@
   gap: 2rem;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .progress-item {
@@ -116,6 +185,34 @@
 
 .progress-value.time-saved {
   color: var(--color-success);
+}
+
+/* Tablet progress indicators */
+@media (max-width: 1023px) {
+  .progress-indicators {
+    padding: 0.75rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .progress-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* Mobile progress indicators */
+@media (max-width: 767px) {
+  .progress-indicators {
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+
+  .progress-label {
+    font-size: 0.65rem;
+  }
+
+  .progress-value {
+    font-size: 1rem;
+  }
 }
 
 /* Loading state */

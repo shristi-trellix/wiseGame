@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { GameState, Scenario, TimelineEvent } from '../../types/game';
+import { GameState, Scenario, TimelineEvent, AgentType } from '../../types/game';
 import { TimelineNode } from './TimelineNode';
 import { TimelineConnector } from './TimelineConnector';
 import './TimelineReplay.css';
@@ -9,6 +9,22 @@ interface TimelineReplayProps {
   scenario: Scenario;
   onComplete?: () => void;
 }
+
+const getAgentIcon = (agent: AgentType): string => {
+  const icons = {
+    EDR: '🖥️',
+    NDR: '🌐',
+    Identity: '👤',
+    IVX: '🔬',
+    WISE: '🧠',
+    Splunk: '🔍',
+    Proxy: '🌍',
+    S3: '☁️',
+    Oracle: '🗄️',
+    OTMonitor: '🏭',
+  };
+  return icons[agent] || '•';
+};
 
 // Extract first sentence from answer text (handling IPs and file extensions)
 const extractKeyFinding = (text: string): string => {
@@ -206,6 +222,17 @@ export const TimelineReplay: React.FC<TimelineReplayProps> = ({
                 />
               )}
               <div className="timeline-node-wrapper">
+                {/* Agent Icon Above Card */}
+                {event.agentType ? (
+                  <div className={`node-agent-icon-above ${event.agentType}`}>
+                    {getAgentIcon(event.agentType)}
+                  </div>
+                ) : event.type === 'alert' ? (
+                  <div className="node-agent-icon-above alert-icon">
+                    ⚠️
+                  </div>
+                ) : null}
+
                 <TimelineNode
                   event={event}
                   isActive={isActive}
