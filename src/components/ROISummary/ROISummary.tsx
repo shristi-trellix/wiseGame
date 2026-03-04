@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
+import { usePlayer } from '../../context/PlayerContext';
 import { TimelineReplay } from '../TimelineReplay/TimelineReplay';
+import ScoreDisplay from '../ScoreDisplay/ScoreDisplay';
+import Leaderboard from '../Leaderboard/Leaderboard';
 import './ROISummary.css';
 
 const ROISummary: React.FC = () => {
-  const { state } = useGame();
+  const { state, dispatch } = useGame();
+  const { refreshPlayer } = usePlayer();
   const scenario = state.scenario;
   const [replayComplete, setReplayComplete] = useState(false);
 
@@ -15,11 +19,22 @@ const ROISummary: React.FC = () => {
 
   const isVictory = reachedConfidenceGoal && reachedTimeGoal && allQuestionsAnswered;
 
+  const handlePlayAgain = () => {
+    // Reset game but stay on the same scenario - go to SOC overview to pick again
+    dispatch({ type: 'RESET_GAME' });
+    refreshPlayer();
+  };
+
+  const handleTryOtherLevel = () => {
+    dispatch({ type: 'RESET_GAME' });
+    refreshPlayer();
+  };
+
   return (
     <div className="roi-summary">
       <div className="summary-container">
         <div className={`summary-verdict ${isVictory ? 'victory' : 'incomplete'}`}>
-          {isVictory ? '🎉 Investigation Complete!' : '⚠️ Investigation Incomplete'}
+          {isVictory ? 'Investigation Complete!' : 'Investigation Incomplete'}
         </div>
 
         <h1 className="summary-title">
@@ -37,6 +52,14 @@ const ROISummary: React.FC = () => {
       )}
 
       <div className="summary-container">
+        {/* Score Display - shown after timeline replay */}
+        {replayComplete && state.currentScoreBreakdown && scenario && (
+          <ScoreDisplay
+            scoreBreakdown={state.currentScoreBreakdown}
+            scenarioId={scenario.id}
+          />
+        )}
+
         <div
           className="summary-metrics"
           style={{
@@ -74,23 +97,28 @@ const ROISummary: React.FC = () => {
           <div className="remediation-summary">
             <h3>Automated Remediation Actions Executed:</h3>
             <ul>
-              <li>✓ Isolated dsquiller-finance-pc from network</li>
-              <li>✓ Disabled Active Directory account for david.squiller</li>
-              <li>✓ Revoked all active session tokens</li>
-              <li>✓ Forced password reset with MFA re-enrollment</li>
-              <li>✓ Blocked IP 178.23.145.92 at perimeter firewall</li>
-              <li>✓ Initiated forensic imaging of endpoint</li>
-              <li>✓ Notified Sales leadership and IR team</li>
+              <li>Isolated dsquiller-finance-pc from network</li>
+              <li>Disabled Active Directory account for david.squiller</li>
+              <li>Revoked all active session tokens</li>
+              <li>Forced password reset with MFA re-enrollment</li>
+              <li>Blocked IP 178.23.145.92 at perimeter firewall</li>
+              <li>Initiated forensic imaging of endpoint</li>
+              <li>Notified Sales leadership and IR team</li>
             </ul>
           </div>
         )}
 
-        <button
-          className="replay-button"
-          onClick={() => window.location.reload()}
-        >
-          {isVictory ? 'Investigate Another Case' : 'Try Again'}
-        </button>
+        {/* Leaderboard */}
+        {replayComplete && <Leaderboard topN={10} />}
+
+        <div className="roi-buttons">
+          <button className="replay-button" onClick={handlePlayAgain}>
+            Play Again
+          </button>
+          <button className="replay-button secondary" onClick={handleTryOtherLevel}>
+            Try Other Level
+          </button>
+        </div>
       </div>
     </div>
   );

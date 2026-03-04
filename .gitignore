@@ -28,6 +28,11 @@ dist-ssr
 .env.local
 .env.production
 
+# Amplify
+amplify_outputs.json
+amplify_outputs.d.ts
+.amplify
+
 # Build outputs
 build
 *.tsbuildinfo

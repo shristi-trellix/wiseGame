@@ -1,16 +1,22 @@
 import React from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useGame } from '../../context/GameContext';
+import { usePlayer } from '../../context/PlayerContext';
 import AgentToolbox from '../AgentToolbox/AgentToolbox';
 import InvestigationGraph from '../InvestigationGraph/InvestigationGraph';
 import TransparencyLog from '../TransparencyLog/TransparencyLog';
 import ROISummary from '../ROISummary/ROISummary';
 import SOCOverview from '../SOCOverview/SOCOverview';
+import RegistrationForm from '../Registration/RegistrationForm';
 import { AgentType, LogEntry } from '../../types/game';
+import { calculateFinalScore } from '../../lib/scoring';
+import { isAmplifyConfigured } from '../../lib/amplify';
+import { updatePlayerScore, createGameSession } from '../../lib/amplifyService';
 import '../../App.css';
 
 const GameBoard: React.FC = () => {
   const { state, dispatch } = useGame();
+  const { player, isRegistered, isLoading } = usePlayer();
   const scenario = state.scenario;
 
   const handleDragEnd = (result: DropResult) => {
@@ -113,9 +119,63 @@ const GameBoard: React.FC = () => {
         }, 1000);
       }
     }
-    // INCORRECT AGENT: Don't increase confidence or time saved
-    // Player can try again with correct agent
+    // INCORRECT AGENT: Record wrong guess for scoring
+    if (!answer.isCorrect) {
+      dispatch({
+        type: 'RECORD_WRONG_GUESS',
+        payload: { questionId, agentType },
+      });
+    }
   };
+
+  // Calculate score and save when game completes
+  React.useEffect(() => {
+    if (state.gamePhase !== 'complete' || !scenario || !state.startTime || state.currentScoreBreakdown) return;
+
+    const completionTimeMs = (state.endTime || Date.now()) - state.startTime;
+    const totalQuestions = scenario.questions.length;
+
+    const scoreBreakdown = calculateFinalScore(
+      state.wrongGuesses,
+      state.wrongAgentsUsed,
+      completionTimeMs,
+      scenario.id,
+      totalQuestions,
+      state.agentAssignments,
+    );
+
+    dispatch({ type: 'SET_SCORE_BREAKDOWN', payload: scoreBreakdown });
+
+    // Save to Amplify if configured and player exists
+    if (isAmplifyConfigured() && player) {
+      (async () => {
+        try {
+          await updatePlayerScore(player.id, scenario.id, scoreBreakdown.finalScore);
+          await createGameSession({
+            playerId: player.id,
+            scenarioId: scenario.id,
+            scoreBreakdown,
+          });
+        } catch (err) {
+          console.warn('Failed to save score:', err);
+        }
+      })();
+    }
+  }, [state.gamePhase, state.startTime, state.endTime, state.currentScoreBreakdown, scenario, player, state.wrongGuesses, state.wrongAgentsUsed, state.agentAssignments, dispatch]);
+
+  // Show loading while checking player session
+  if (isLoading) {
+    return (
+      <div className="app" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.1rem' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  // Show registration if not registered
+  if (state.gamePhase === 'registration' || (!isRegistered && state.gamePhase === 'soc-overview')) {
+    return <RegistrationForm />;
+  }
 
   // Show SOC overview screen
   if (state.gamePhase === 'soc-overview') {

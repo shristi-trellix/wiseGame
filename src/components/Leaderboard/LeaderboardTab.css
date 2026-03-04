@@ -1,0 +1,101 @@
+/* Floating button */
+.lb-tab-button {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+  background: linear-gradient(135deg, #2814FF, #5a3fff);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(40, 20, 255, 0.35);
+  transition: transform 0.15s, box-shadow 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.lb-tab-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(40, 20, 255, 0.5);
+}
+
+.lb-tab-button:active {
+  transform: translateY(0);
+}
+
+/* Modal overlay */
+.lb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lbFadeIn 0.2s ease-out;
+}
+
+@keyframes lbFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal */
+.lb-modal {
+  position: relative;
+  background: #0f0f18;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 640px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: lbSlideUp 0.25s ease-out;
+}
+
+@keyframes lbSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lb-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.lb-modal-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .lb-tab-button {
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .lb-modal {
+    width: 95%;
+    max-height: 85vh;
+  }
+}

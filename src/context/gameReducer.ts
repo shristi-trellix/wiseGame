@@ -8,10 +8,13 @@ export const initialGameState: GameState = {
   confidenceScore: 0,
   timeSaved: 0,
   transparencyLog: [],
-  gamePhase: 'soc-overview',
+  gamePhase: 'registration',
   showRemediationButton: false,
   startTime: null,
   endTime: null,
+  wrongGuesses: {},
+  wrongAgentsUsed: {},
+  currentScoreBreakdown: null,
 };
 
 export const gameReducer = (state: GameState, action: GameAction): GameState => {
@@ -26,8 +29,11 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
       return {
         ...state,
         gamePhase: 'playing',
-        currentQuestionId: 'q1', // First question
+        currentQuestionId: 'q1',
         startTime: Date.now(),
+        wrongGuesses: {},
+        wrongAgentsUsed: {},
+        currentScoreBreakdown: null,
       };
 
     case 'ASSIGN_AGENT': {
@@ -88,6 +94,36 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
     case 'RESET_GAME':
       return {
         ...initialGameState,
+        gamePhase: 'soc-overview', // After reset, go to SOC overview (not registration)
+      };
+
+    case 'RECORD_WRONG_GUESS': {
+      const { questionId, agentType } = action.payload;
+      const currentCount = state.wrongGuesses[questionId] || 0;
+      const currentAgents = state.wrongAgentsUsed[questionId] || [];
+      return {
+        ...state,
+        wrongGuesses: {
+          ...state.wrongGuesses,
+          [questionId]: currentCount + 1,
+        },
+        wrongAgentsUsed: {
+          ...state.wrongAgentsUsed,
+          [questionId]: [...currentAgents, agentType],
+        },
+      };
+    }
+
+    case 'SET_SCORE_BREAKDOWN':
+      return {
+        ...state,
+        currentScoreBreakdown: action.payload,
+      };
+
+    case 'SET_PHASE':
+      return {
+        ...state,
+        gamePhase: action.payload,
       };
 
     default:

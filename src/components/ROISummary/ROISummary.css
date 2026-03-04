@@ -147,8 +147,14 @@
   line-height: 1.6;
 }
 
+.roi-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
 .replay-button {
-  width: 100%;
+  flex: 1;
   background: linear-gradient(135deg, var(--color-agent-glow), #3820FF);
   color: white;
   border: none;
@@ -162,6 +168,17 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 20px rgba(40, 20, 255, 0.3);
   animation: fadeInUp 0.5s ease 0.6s backwards;
+}
+
+.replay-button.secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+}
+
+.replay-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
 }
 
 .replay-button:hover {

@@ -12,7 +12,7 @@ export type AgentType =
   | 'OTMonitor'; // OT protocol monitoring (Modbus, SCADA)
 
 // Game phases
-export type GamePhase = 'soc-overview' | 'playing' | 'complete';
+export type GamePhase = 'registration' | 'soc-overview' | 'playing' | 'complete';
 
 // Transparency log entry
 export interface LogEntry {
@@ -92,6 +92,21 @@ export interface Scenario {
   };
 }
 
+// Score breakdown for competitive mode
+export interface ScoreBreakdown {
+  accuracyScore: number;
+  speedScore: number;
+  rawScore: number;
+  multiplier: number;
+  finalScore: number;
+  completionTimeMs: number;
+  questionResults: Record<string, {
+    wrongGuesses: number;
+    wrongAgentsUsed: AgentType[];
+    correctAgent: AgentType;
+  }>;
+}
+
 // Game state
 export interface GameState {
   scenario: Scenario | null;
@@ -105,6 +120,10 @@ export interface GameState {
   showRemediationButton: boolean;
   startTime: number | null;
   endTime: number | null;
+  // Competitive scoring
+  wrongGuesses: Record<string, number>;
+  wrongAgentsUsed: Record<string, AgentType[]>;
+  currentScoreBreakdown: ScoreBreakdown | null;
 }
 
 // Game actions for reducer
@@ -118,4 +137,7 @@ export type GameAction =
   | { type: 'UNLOCK_NEXT_QUESTION'; payload: string }
   | { type: 'SHOW_REMEDIATION_BUTTON' }
   | { type: 'COMPLETE_GAME' }
-  | { type: 'RESET_GAME' };
+  | { type: 'RESET_GAME' }
+  | { type: 'RECORD_WRONG_GUESS'; payload: { questionId: string; agentType: AgentType } }
+  | { type: 'SET_SCORE_BREAKDOWN'; payload: ScoreBreakdown }
+  | { type: 'SET_PHASE'; payload: GamePhase };

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
+import { usePlayer } from '../../context/PlayerContext';
+import LeaderboardTab from '../Leaderboard/LeaderboardTab';
 import './SOCOverview.css';
 
 // Generate fake alerts with random positions and animations
@@ -46,6 +48,7 @@ interface ScenarioAlert {
 
 const SOCOverview: React.FC = () => {
   const { dispatch, setScenario } = useGame();
+  const { player } = usePlayer();
   const [hoveredAlert, setHoveredAlert] = useState<string | null>(null);
   const [isZooming, setIsZooming] = useState(false);
 
@@ -163,8 +166,16 @@ const SOCOverview: React.FC = () => {
         </div>
       ))}
 
+      {/* Leaderboard floating button */}
+      <LeaderboardTab />
+
       {/* Foreground: Content Box */}
       <div className="content-box">
+        {player && player.totalPlays > 0 && (
+          <div className="soc-welcome-back">
+            Welcome back, {player.firstName}! Best score: {player.combinedScore}
+          </div>
+        )}
         <div className="soc-header">
           <h1 className="soc-title">Security Operations Center</h1>
           <div className="soc-stats">

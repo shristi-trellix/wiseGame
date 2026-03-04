@@ -251,6 +251,18 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
+.soc-welcome-back {
+  text-align: center;
+  color: rgba(0, 205, 0, 0.85);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: rgba(0, 205, 0, 0.08);
+  border: 1px solid rgba(0, 205, 0, 0.2);
+  border-radius: 8px;
+}
+
 .soc-header {
   text-align: center;
   margin-bottom: 2rem;
