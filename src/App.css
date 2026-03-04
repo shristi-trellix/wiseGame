@@ -10,6 +10,13 @@
   padding: 1.5rem 2rem;
   border-bottom: 2px solid var(--color-border);
   background-color: var(--color-panel-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header-left {
+  flex: 1;
 }
 
 .app-title {
@@ -27,6 +34,64 @@
   margin-top: 0.25rem;
 }
 
+/* Timer */
+.app-timer {
+  text-align: center;
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.timer-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin-bottom: 0.15rem;
+}
+
+.timer-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  font-family: monospace;
+}
+
+/* Header right section */
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Exit button */
+.app-exit-btn {
+  padding: 0.45rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.app-exit-btn:hover {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: rgba(255, 68, 68, 0.4);
+  color: #FF6B6B;
+}
+
+.app-exit-btn.confirming {
+  background: rgba(255, 68, 68, 0.15);
+  border-color: #FF4444;
+  color: #FF4444;
+}
+
 /* Mobile responsiveness for header */
 @media (max-width: 767px) {
   .app-header {
@@ -39,6 +104,23 @@
 
   .app-subtitle {
     font-size: 0.75rem;
+  }
+
+  .app-timer {
+    padding: 0.35rem 0.75rem;
+  }
+
+  .timer-value {
+    font-size: 1.1rem;
+  }
+
+  .app-header-right {
+    gap: 0.5rem;
+  }
+
+  .app-exit-btn {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.7rem;
   }
 }
 

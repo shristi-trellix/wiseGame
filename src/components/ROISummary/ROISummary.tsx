@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGame } from '../../context/GameContext';
 import { usePlayer } from '../../context/PlayerContext';
 import { TimelineReplay } from '../TimelineReplay/TimelineReplay';
@@ -11,6 +11,17 @@ const ROISummary: React.FC = () => {
   const { refreshPlayer } = usePlayer();
   const scenario = state.scenario;
   const [replayComplete, setReplayComplete] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+  const summaryRef = useRef<HTMLDivElement>(null);
+
+  // Hide scroll hint once user scrolls (listen on window since body scrolls, not the div)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) setShowScrollHint(false);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const reachedConfidenceGoal = state.confidenceScore >= (scenario?.winConditions.minConfidenceScore || 95);
   const reachedTimeGoal = state.timeSaved >= (scenario?.winConditions.minTimeSaved || 12);
@@ -31,7 +42,7 @@ const ROISummary: React.FC = () => {
   };
 
   return (
-    <div className="roi-summary">
+    <div className="roi-summary" ref={summaryRef}>
       <div className="summary-container">
         <div className={`summary-verdict ${isVictory ? 'victory' : 'incomplete'}`}>
           {isVictory ? 'Investigation Complete!' : 'Investigation Incomplete'}
@@ -67,7 +78,7 @@ const ROISummary: React.FC = () => {
           }}
         >
           <div className="metric-card">
-            <div className="metric-label">Confidence Score</div>
+            <div className="metric-label">Trellix Wise Confidence</div>
             <div className={`metric-value ${reachedConfidenceGoal ? 'success' : 'warning'}`}>
               {state.confidenceScore}%
             </div>
@@ -120,6 +131,14 @@ const ROISummary: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      {showScrollHint && replayComplete && (
+        <div className="scroll-hint" onClick={() => window.scrollBy({ top: 300, behavior: 'smooth' })}>
+          <div className="scroll-hint-text">Scroll for scores</div>
+          <div className="scroll-hint-arrow">&#8595;</div>
+        </div>
+      )}
     </div>
   );
 };

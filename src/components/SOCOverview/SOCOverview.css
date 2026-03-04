@@ -1,5 +1,5 @@
 .soc-overview {
-  min-height: 100vh;
+  height: 100vh;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
   color: white;
   overflow: hidden;
@@ -67,23 +67,17 @@
   box-shadow: 0 0 8px rgba(255, 68, 68, 0.3);
 }
 
-/* Scenario Alert Nodes - Special Styling */
+/* Decorative Pulsing Nodes (ambient, no interaction) */
 .scenario-node {
   position: fixed;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  cursor: pointer;
-  pointer-events: all;
-  z-index: 1000;
+  pointer-events: none;
+  z-index: 2;
   transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
 }
 
-/* High Severity (David Squiller) - Blue Glow */
 .scenario-node.high {
   background: var(--color-agent-glow);
   box-shadow: 0 0 40px rgba(40, 20, 255, 1), 0 0 80px rgba(40, 20, 255, 0.8), 0 0 120px rgba(40, 20, 255, 0.6);
@@ -94,22 +88,13 @@
   0%, 100% {
     box-shadow: 0 0 40px rgba(40, 20, 255, 1), 0 0 80px rgba(40, 20, 255, 0.8), 0 0 120px rgba(40, 20, 255, 0.6);
     transform: translate(-50%, -50%) scale(1);
-    background: var(--color-agent-glow);
   }
   50% {
     box-shadow: 0 0 60px rgba(40, 20, 255, 1), 0 0 120px rgba(40, 20, 255, 1), 0 0 180px rgba(40, 20, 255, 0.8);
     transform: translate(-50%, -50%) scale(1.3);
-    background: rgba(40, 20, 255, 1);
   }
 }
 
-.scenario-node.high:hover {
-  transform: translate(-50%, -50%) scale(1.5);
-  box-shadow: 0 0 80px rgba(40, 20, 255, 1), 0 0 160px rgba(40, 20, 255, 1), 0 0 240px rgba(40, 20, 255, 0.8);
-  animation-play-state: paused;
-}
-
-/* Critical Severity (PLC Hijacking) - Red Glow */
 .scenario-node.critical {
   background: var(--color-error);
   box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.8), 0 0 120px rgba(255, 68, 68, 0.6);
@@ -120,120 +105,199 @@
   0%, 100% {
     box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.8), 0 0 120px rgba(255, 68, 68, 0.6);
     transform: translate(-50%, -50%) scale(1);
-    background: var(--color-error);
   }
   50% {
     box-shadow: 0 0 60px rgba(255, 68, 68, 1), 0 0 120px rgba(255, 68, 68, 1), 0 0 180px rgba(255, 68, 68, 0.8);
     transform: translate(-50%, -50%) scale(1.3);
-    background: rgba(255, 68, 68, 1);
   }
 }
 
-.scenario-node.critical:hover {
-  transform: translate(-50%, -50%) scale(1.5);
-  box-shadow: 0 0 80px rgba(255, 68, 68, 1), 0 0 160px rgba(255, 68, 68, 1), 0 0 240px rgba(255, 68, 68, 0.8);
-  animation-play-state: paused;
-}
-
-/* Hovered state for both severities */
-.scenario-node.hovered {
-  transform: translate(-50%, -50%) scale(1.6);
-  z-index: 2000;
-}
-
-/* Alert Preview Popup */
-.alert-preview {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 1rem;
-  background: rgba(10, 10, 10, 0.98);
-  border-radius: 8px;
-  padding: 1rem;
-  min-width: 300px;
-  max-width: 90vw;
-  z-index: 10000;
-  animation: slideDown 0.3s ease;
-  pointer-events: none;
-}
-
-/* Preview popup border and shadow colors by severity */
-.scenario-node.high .alert-preview {
-  border: 2px solid var(--color-agent-glow);
-  box-shadow: 0 8px 30px rgba(40, 20, 255, 0.5);
-}
-
-.scenario-node.critical .alert-preview {
-  border: 2px solid var(--color-error);
-  box-shadow: 0 8px 30px rgba(255, 68, 68, 0.5);
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-.preview-header {
-  margin-bottom: 0.75rem;
-}
-
-.preview-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Badge colors by severity */
-.scenario-node.high .preview-badge {
-  background: var(--color-agent-glow);
-}
-
-.scenario-node.critical .preview-badge {
-  background: var(--color-error);
-}
-
-.preview-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 0.5rem;
-  font-family: 'Courier New', monospace;
-}
-
-.preview-host,
-.preview-time {
-  font-size: 0.75rem;
-  color: #ccc;
-  margin-bottom: 0.25rem;
-}
-
-.preview-action {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 0.8rem;
-  font-weight: 600;
+/* ── Scenario Selection Cards ── */
+.scenario-cards {
+  margin-top: 1.25rem;
   text-align: center;
 }
 
-/* Action text color by severity */
-.scenario-node.high .preview-action {
+.scenario-cards-heading {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.75rem;
+}
+
+.scenario-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.scenario-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 1.1rem 1rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Pulsing border for Easy (blue) */
+.scenario-card.easy {
+  animation: easyBorderPulse 2s ease-in-out infinite;
+}
+
+@keyframes easyBorderPulse {
+  0%, 100% {
+    border-color: rgba(40, 20, 255, 0.4);
+    box-shadow: 0 0 12px rgba(40, 20, 255, 0.15), inset 0 0 12px rgba(40, 20, 255, 0.05);
+  }
+  50% {
+    border-color: rgba(40, 20, 255, 0.9);
+    box-shadow: 0 0 25px rgba(40, 20, 255, 0.35), inset 0 0 20px rgba(40, 20, 255, 0.1);
+  }
+}
+
+/* Pulsing border for Hard (red) */
+.scenario-card.hard {
+  animation: hardBorderPulse 2s ease-in-out infinite;
+}
+
+@keyframes hardBorderPulse {
+  0%, 100% {
+    border-color: rgba(255, 68, 68, 0.4);
+    box-shadow: 0 0 12px rgba(255, 68, 68, 0.15), inset 0 0 12px rgba(255, 68, 68, 0.05);
+  }
+  50% {
+    border-color: rgba(255, 68, 68, 0.9);
+    box-shadow: 0 0 25px rgba(255, 68, 68, 0.35), inset 0 0 20px rgba(255, 68, 68, 0.1);
+  }
+}
+
+.scenario-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.scenario-card.easy:hover {
+  animation: none;
+  border-color: rgba(40, 20, 255, 0.9);
+  box-shadow: 0 8px 35px rgba(40, 20, 255, 0.4), inset 0 0 20px rgba(40, 20, 255, 0.1);
+}
+
+.scenario-card.hard:hover {
+  animation: none;
+  border-color: rgba(255, 68, 68, 0.9);
+  box-shadow: 0 8px 35px rgba(255, 68, 68, 0.4), inset 0 0 20px rgba(255, 68, 68, 0.1);
+}
+
+.scenario-card:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.scenario-card.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Card top row: badges */
+.scenario-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.difficulty-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.difficulty-badge.easy {
+  background: var(--color-agent-glow);
+}
+
+.difficulty-badge.hard {
+  background: var(--color-error);
+}
+
+.multiplier-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+/* Card icon */
+.scenario-card-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+/* Card title */
+.scenario-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.scenario-card-subtitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Card description */
+.scenario-card-description {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 260px;
+}
+
+/* Card meta (host) */
+.scenario-card-meta {
+  margin-top: 0.1rem;
+}
+
+.scenario-card-host {
+  font-size: 0.65rem;
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* Card action button area */
+.scenario-card-action {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.scenario-card.easy .scenario-card-action {
   color: var(--color-agent-glow);
 }
 
-.scenario-node.critical .preview-action {
+.scenario-card.hard .scenario-card-action {
   color: var(--color-error);
 }
 
@@ -244,8 +308,8 @@
   background: rgba(10, 10, 10, 0.92);
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
-  padding: 3rem 4rem;
-  max-width: 900px;
+  padding: 1.75rem 3rem;
+  max-width: 860px;
   width: 90%;
   backdrop-filter: blur(10px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -254,10 +318,10 @@
 .soc-welcome-back {
   text-align: center;
   color: rgba(0, 205, 0, 0.85);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
+  padding: 0.35rem 1rem;
+  margin-bottom: 0.75rem;
   background: rgba(0, 205, 0, 0.08);
   border: 1px solid rgba(0, 205, 0, 0.2);
   border-radius: 8px;
@@ -265,13 +329,13 @@
 
 .soc-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.75rem;
 }
 
 .soc-title {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   color: var(--color-agent-glow);
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -280,8 +344,8 @@
 .soc-stats {
   display: flex;
   justify-content: center;
-  gap: 3rem;
-  margin-bottom: 2rem;
+  gap: 2.5rem;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
@@ -290,135 +354,68 @@
 }
 
 .stat-value {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-error);
   font-family: 'Courier New', monospace;
 }
 
 .stat-label {
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   color: #888;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-top: 0.25rem;
+  margin-top: 0.15rem;
 }
 
 .soc-message {
   text-align: center;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .message-large {
-  font-size: 2rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   color: #fff;
 }
 
 .message-medium {
-  font-size: 1.5rem;
+  font-size: 1.05rem;
   color: #ccc;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .message-question {
-  font-size: 1.75rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-warning);
-  margin: 1.5rem 0;
+  margin: 0.5rem 0;
 }
 
 .message-solution {
-  font-size: 1.25rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.6;
   color: #bbb;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 .wise-highlight {
   color: var(--color-agent-glow);
   font-weight: 700;
-  font-size: 1.4em;
+  font-size: 1.2em;
 }
 
-.message-instruction {
-  font-size: 1rem;
-  color: #888;
-  margin-top: 2rem;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.magnifying-glass-icon {
-  font-size: 1.5rem;
-  display: inline-block;
-  margin-right: 0.5rem;
-}
 
 /* Tablet SOC Overview (768px - 1023px) */
 @media (max-width: 1023px) {
   .content-box {
-    padding: 2rem 2.5rem;
-    width: 85%;
-  }
-
-  .soc-title {
-    font-size: 2rem;
-  }
-
-  .stat-value {
-    font-size: 2rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-  }
-
-  .message-large {
-    font-size: 1.5rem;
-  }
-
-  .message-medium {
-    font-size: 1.25rem;
-  }
-
-  .message-question {
-    font-size: 1.4rem;
-  }
-
-  .message-solution {
-    font-size: 1.1rem;
-  }
-
-  .scenario-node {
-    width: 35px;
-    height: 35px;
-    font-size: 1.25rem;
-  }
-
-  /* Ensure alert preview doesn't overflow on tablet */
-  .alert-preview {
-    min-width: 280px;
-    max-width: 85vw;
-  }
-}
-
-/* Mobile SOC Overview (up to 767px) */
-@media (max-width: 767px) {
-  .content-box {
-    padding: 1.5rem 1.5rem;
-    width: 92%;
-    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    width: 88%;
   }
 
   .soc-title {
     font-size: 1.5rem;
-    letter-spacing: 1px;
-    margin-bottom: 1rem;
-  }
-
-  .soc-stats {
-    gap: 1.5rem;
   }
 
   .stat-value {
@@ -429,71 +426,127 @@
     font-size: 0.65rem;
   }
 
-  .soc-message {
-    padding: 0 0.5rem;
-  }
-
   .message-large {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 
   .message-medium {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .message-question {
-    font-size: 1.1rem;
-    margin: 1rem 0;
+    font-size: 1.05rem;
   }
 
   .message-solution {
     font-size: 0.9rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .wise-highlight {
-    font-size: 1.2em;
-  }
-
-  .message-instruction {
-    font-size: 0.85rem;
-    margin-top: 1.5rem;
-  }
-
-  .magnifying-glass-icon {
-    font-size: 1.25rem;
   }
 
   .scenario-node {
     width: 30px;
     height: 30px;
+  }
+
+  .scenario-card-description {
+    font-size: 0.7rem;
+  }
+}
+
+/* Mobile SOC Overview (up to 767px) */
+@media (max-width: 767px) {
+  .content-box {
+    padding: 1.25rem 1.25rem;
+    width: 94%;
+    border-radius: 12px;
+  }
+
+  .soc-title {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .soc-stats {
+    gap: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+
+  .soc-message {
+    padding: 0 0.25rem;
+  }
+
+  .message-large {
     font-size: 1rem;
   }
 
-  .alert-preview {
-    min-width: 220px;
-    max-width: 90vw;
-    padding: 0.75rem;
+  .message-medium {
     font-size: 0.85rem;
-    left: auto;
-    right: -10px;
-    transform: none;
   }
 
-  /* Override left positioning for left-side alert on mobile */
-  .scenario-node:first-of-type .alert-preview {
-    left: -10px;
-    right: auto;
+  .message-question {
+    font-size: 0.95rem;
+    margin: 0.35rem 0;
   }
 
-  .preview-title {
+  .message-solution {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .wise-highlight {
+    font-size: 1.1em;
+  }
+
+  .scenario-node {
+    width: 20px;
+    height: 20px;
+  }
+
+  .scenario-cards {
+    margin-top: 0.75rem;
+  }
+
+  .scenario-cards-heading {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .scenario-card {
+    padding: 0.75rem 0.6rem;
+    gap: 0.25rem;
+  }
+
+  .scenario-card-icon {
+    font-size: 1.35rem;
+  }
+
+  .scenario-card-title {
     font-size: 0.8rem;
   }
 
-  .preview-host,
-  .preview-time {
+  .scenario-card-description {
+    display: none;
+  }
+
+  .scenario-card-meta {
+    display: none;
+  }
+
+  .scenario-card-action {
     font-size: 0.7rem;
+    padding-top: 0.35rem;
   }
 }
 

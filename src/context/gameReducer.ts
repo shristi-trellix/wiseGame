@@ -8,7 +8,7 @@ export const initialGameState: GameState = {
   confidenceScore: 0,
   timeSaved: 0,
   transparencyLog: [],
-  gamePhase: 'registration',
+  gamePhase: 'landing',
   showRemediationButton: false,
   startTime: null,
   endTime: null,

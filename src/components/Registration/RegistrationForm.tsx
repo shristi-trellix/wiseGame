@@ -75,8 +75,8 @@ const RegistrationForm: React.FC = () => {
 
       <div className="reg-content">
         <div className="reg-header">
-          <h1 className="reg-title">Wise Detective Challenge</h1>
-          <p className="reg-subtitle">Test your security investigation skills and compete for the top of the leaderboard</p>
+          <h1 className="reg-title">Trellix Wise Detective Challenge</h1>
+          <p className="reg-subtitle">Test your security investigation skills with Trellix Wise and compete for the top of the leaderboard</p>
         </div>
 
         <form className="reg-form" onSubmit={handleSubmit}>

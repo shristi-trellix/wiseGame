@@ -12,7 +12,7 @@ export type AgentType =
   | 'OTMonitor'; // OT protocol monitoring (Modbus, SCADA)
 
 // Game phases
-export type GamePhase = 'registration' | 'soc-overview' | 'playing' | 'complete';
+export type GamePhase = 'landing' | 'registration' | 'soc-overview' | 'playing' | 'complete';
 
 // Transparency log entry
 export interface LogEntry {

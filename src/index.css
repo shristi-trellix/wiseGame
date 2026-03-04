@@ -7,6 +7,8 @@
   --color-success: #00CD00;
   --color-error: #FF4444;
   --color-warning: #FFA500;
+  --color-blue: #00A5FF;
+  --color-brand-gradient: linear-gradient(135deg, #2814FF, #00CD00);
 
   /* Agent Colors (IT/Enterprise) */
   --color-edr: #00D9FF;

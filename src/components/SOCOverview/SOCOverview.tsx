@@ -35,85 +35,94 @@ const generateAlerts = (count: number) => {
   }));
 };
 
-interface ScenarioAlert {
+interface ScenarioCard {
   id: string;
   scenarioFile: string;
-  type: string;
-  severity: 'High' | 'Critical';
-  host: string;
-  time: string;
+  title: string;
+  subtitle: string;
+  difficulty: 'Easy' | 'Hard';
+  multiplier: string;
   icon: string;
-  position: { x: string; y: string };
+  description: string;
+  host: string;
+  alertType: string;
 }
+
+const scenarios: ScenarioCard[] = [
+  {
+    id: 'david-squiller-case',
+    scenarioFile: '/scenario-david-squiller.json',
+    title: 'David Squiller',
+    subtitle: 'Credential Theft',
+    difficulty: 'Easy',
+    multiplier: '1x',
+    icon: '👤',
+    description: 'Investigate a PowerShell-based credential theft attack targeting enterprise IT.',
+    host: 'dsquiller-finance-pc',
+    alertType: 'WINDOWS METHODOLOGY [Powershell DownloadFile]',
+  },
+  {
+    id: 'plc-hijacking-manufacturing',
+    scenarioFile: '/scenario-plc-hijacking.json',
+    title: 'Manufacturing Floor Zero',
+    subtitle: 'PLC Hijacking',
+    difficulty: 'Hard',
+    multiplier: '2x',
+    icon: '🏭',
+    description: 'Trace an OT/ICS attack using Modbus TCP exploitation on industrial controllers.',
+    host: 'PLC-HVAC-012',
+    alertType: 'INDUSTRIAL PROTOCOL ANOMALY [Unauthorized Modbus TCP]',
+  },
+];
 
 const SOCOverview: React.FC = () => {
   const { dispatch, setScenario } = useGame();
   const { player } = usePlayer();
-  const [hoveredAlert, setHoveredAlert] = useState<string | null>(null);
   const [isZooming, setIsZooming] = useState(false);
+  const [loadingScenario, setLoadingScenario] = useState<string | null>(null);
 
   // Responsive alert count based on screen size
   const alertCount = React.useMemo(() => {
     const width = window.innerWidth;
-    if (width < 768) return 150; // Mobile: fewer alerts for performance
-    if (width < 1024) return 300; // Tablet: medium alert count
-    return 500; // Desktop: full alert swarm
+    if (width < 768) return 150;
+    if (width < 1024) return 300;
+    return 500;
   }, []);
 
   const alerts = React.useMemo(() => generateAlerts(alertCount), [alertCount]);
 
-  // Scenario alerts configuration - positioning adjusts for screen size
+  // Decorative pulsing node positions
   const isMobile = window.innerWidth < 768;
   const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 
-  const scenarioAlerts: ScenarioAlert[] = [
+  const decorativeNodes = [
     {
-      id: 'david-squiller-alert',
-      scenarioFile: '/scenario-david-squiller.json',
-      type: 'WINDOWS METHODOLOGY [Powershell DownloadFile]',
-      severity: 'High',
-      host: 'dsquiller-finance-pc',
-      time: '14:23',
-      icon: '👤',
-      position: isMobile
-        ? { x: '85%', y: '12%' }  // Mobile: top right corner, well above content
-        : isTablet
-        ? { x: '80%', y: '20%' }  // Tablet: upper right
-        : { x: '75%', y: '50%' }, // Desktop: original position
+      severity: 'high' as const,
+      position: isMobile ? { x: '85%', y: '12%' } : isTablet ? { x: '80%', y: '20%' } : { x: '75%', y: '50%' },
     },
     {
-      id: 'plc-hijacking-alert',
-      scenarioFile: '/scenario-plc-hijacking.json',
-      type: 'INDUSTRIAL PROTOCOL ANOMALY [Unauthorized Modbus TCP]',
-      severity: 'Critical',
-      host: 'PLC-HVAC-012',
-      time: '03:47',
-      icon: '🏭',
-      position: isMobile
-        ? { x: '15%', y: '10%' }  // Mobile: top left corner, well above content
-        : isTablet
-        ? { x: '20%', y: '18%' }  // Tablet: upper left
-        : { x: '25%', y: '45%' }, // Desktop: original position
+      severity: 'critical' as const,
+      position: isMobile ? { x: '15%', y: '10%' } : isTablet ? { x: '20%', y: '18%' } : { x: '25%', y: '45%' },
     },
   ];
 
-  const handleAlertClick = async (alert: ScenarioAlert) => {
+  const handleScenarioClick = async (scenario: ScenarioCard) => {
+    if (loadingScenario) return;
+    setLoadingScenario(scenario.id);
     setIsZooming(true);
 
-    // Load scenario JSON
     try {
-      const response = await fetch(alert.scenarioFile);
+      const response = await fetch(scenario.scenarioFile);
       const data = await response.json();
-
-      // Set the loaded scenario in the game context
       setScenario(data.scenario);
 
-      // Wait for zoom animation, then start game with loaded scenario
       setTimeout(() => {
         dispatch({ type: 'START_GAME' });
       }, 1500);
     } catch (error) {
       console.error('Failed to load scenario:', error);
+      setIsZooming(false);
+      setLoadingScenario(null);
     }
   };
 
@@ -133,37 +142,15 @@ const SOCOverview: React.FC = () => {
             }}
           />
         ))}
-
       </div>
 
-      {/* Scenario Alert Nodes - prominent and interactive, positioned above swarm */}
-      {scenarioAlerts.map((alert) => (
+      {/* Decorative pulsing nodes (no interaction) */}
+      {decorativeNodes.map((node, i) => (
         <div
-          key={alert.id}
-          className={`scenario-node ${alert.severity.toLowerCase()} ${hoveredAlert === alert.id ? 'hovered' : ''}`}
-          style={{
-            left: alert.position.x,
-            top: alert.position.y,
-          }}
-          onMouseEnter={() => setHoveredAlert(alert.id)}
-          onMouseLeave={() => setHoveredAlert(null)}
-          onClick={() => handleAlertClick(alert)}
-        >
-          <div className="scenario-icon">{alert.icon}</div>
-          {hoveredAlert === alert.id && (
-            <div className="alert-preview">
-              <div className="preview-header">
-                <span className={`preview-badge ${alert.severity.toLowerCase()}`}>
-                  {alert.severity === 'Critical' ? '🚨 CRITICAL' : '⚠️ HIGH'}
-                </span>
-              </div>
-              <div className="preview-title">{alert.type}</div>
-              <div className="preview-host">Host: {alert.host}</div>
-              <div className="preview-time">Time: {alert.time}:22 UTC</div>
-              <div className="preview-action">Click to investigate with Wise →</div>
-            </div>
-          )}
-        </div>
+          key={i}
+          className={`scenario-node ${node.severity} decorative`}
+          style={{ left: node.position.x, top: node.position.y }}
+        />
       ))}
 
       {/* Leaderboard floating button */}
@@ -203,9 +190,38 @@ const SOCOverview: React.FC = () => {
             <br />
             and bring you only the ones that need your attention.
           </p>
-          <p className="message-instruction">
-            <span className="magnifying-glass-icon">🔍</span> Hover over the glowing alert to see how Trellix Wise investigates each alert
-          </p>
+        </div>
+
+        {/* Scenario Selection Cards */}
+        <div className="scenario-cards">
+          <h2 className="scenario-cards-heading">Choose Your Investigation</h2>
+          <div className="scenario-cards-grid">
+            {scenarios.map((scenario) => (
+              <button
+                key={scenario.id}
+                className={`scenario-card ${scenario.difficulty.toLowerCase()} ${loadingScenario === scenario.id ? 'loading' : ''}`}
+                onClick={() => handleScenarioClick(scenario)}
+                disabled={!!loadingScenario}
+              >
+                <div className="scenario-card-top">
+                  <span className={`difficulty-badge ${scenario.difficulty.toLowerCase()}`}>
+                    {scenario.difficulty}
+                  </span>
+                  <span className="multiplier-badge">{scenario.multiplier}</span>
+                </div>
+                <div className="scenario-card-icon">{scenario.icon}</div>
+                <div className="scenario-card-title">{scenario.title}</div>
+                <div className="scenario-card-subtitle">{scenario.subtitle}</div>
+                <div className="scenario-card-description">{scenario.description}</div>
+                <div className="scenario-card-meta">
+                  <span className="scenario-card-host">{scenario.host}</span>
+                </div>
+                <div className="scenario-card-action">
+                  {loadingScenario === scenario.id ? 'Loading...' : 'Investigate →'}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -12,7 +12,7 @@ interface StreamingLogEntryProps {
 const StreamingLogEntry: React.FC<StreamingLogEntryProps> = ({ text, shouldStream, onComplete }) => {
   const { displayedText, isTyping } = useStreamingText({
     text: shouldStream ? text : text, // Always use full text
-    speed: shouldStream ? 5 : 0, // 5ms per character for fast streaming (human reading speed)
+    speed: shouldStream ? 1 : 0, // 1ms per character - very fast streaming
     onComplete: shouldStream ? onComplete : undefined,
   });
 

@@ -2,7 +2,7 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #0a0a0f;
+  background: #1A1A1A;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +59,7 @@
   color: #fff;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #fff 0%, #a8b4ff 50%, #2814FF 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #00A5FF 50%, #2814FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -162,7 +162,7 @@
 .reg-submit {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, #2814FF, #5a3fff);
+  background: linear-gradient(135deg, #2814FF, #00CD00);
   border: none;
   border-radius: 10px;
   color: #fff;

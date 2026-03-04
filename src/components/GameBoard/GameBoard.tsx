@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useGame } from '../../context/GameContext';
 import { usePlayer } from '../../context/PlayerContext';
@@ -8,16 +8,48 @@ import TransparencyLog from '../TransparencyLog/TransparencyLog';
 import ROISummary from '../ROISummary/ROISummary';
 import SOCOverview from '../SOCOverview/SOCOverview';
 import RegistrationForm from '../Registration/RegistrationForm';
+import LandingPage from '../LandingPage/LandingPage';
 import { AgentType, LogEntry } from '../../types/game';
 import { calculateFinalScore } from '../../lib/scoring';
 import { isAmplifyConfigured } from '../../lib/amplify';
 import { updatePlayerScore, createGameSession } from '../../lib/amplifyService';
 import '../../App.css';
 
+const formatTime = (ms: number): string => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+};
+
 const GameBoard: React.FC = () => {
   const { state, dispatch } = useGame();
   const { player, isRegistered, isLoading } = usePlayer();
   const scenario = state.scenario;
+
+  // Exit confirmation
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+
+  const handleExit = () => {
+    if (showExitConfirm) {
+      setShowExitConfirm(false);
+      dispatch({ type: 'RESET_GAME' });
+      dispatch({ type: 'SET_PHASE', payload: 'landing' });
+    } else {
+      setShowExitConfirm(true);
+    }
+  };
+
+  // Live timer
+  const [elapsed, setElapsed] = useState(0);
+  useEffect(() => {
+    if (state.gamePhase !== 'playing' || !state.startTime) return;
+    setElapsed(Date.now() - state.startTime);
+    const interval = setInterval(() => {
+      setElapsed(Date.now() - state.startTime!);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [state.gamePhase, state.startTime]);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
@@ -172,6 +204,11 @@ const GameBoard: React.FC = () => {
     );
   }
 
+  // Show landing page
+  if (state.gamePhase === 'landing') {
+    return <LandingPage />;
+  }
+
   // Show registration if not registered
   if (state.gamePhase === 'registration' || (!isRegistered && state.gamePhase === 'soc-overview')) {
     return <RegistrationForm />;
@@ -193,8 +230,23 @@ const GameBoard: React.FC = () => {
       <div className="app">
         {/* Header */}
         <header className="app-header">
-          <h1 className="app-title">Trellix Wise Auto Investigation</h1>
-          <div className="app-subtitle">{scenario?.title || 'The Auto-Investigation Challenge'}</div>
+          <div className="app-header-left">
+            <h1 className="app-title">Trellix Wise Auto Investigation</h1>
+            <div className="app-subtitle">{scenario?.title || 'The Auto-Investigation Challenge'}</div>
+          </div>
+          <div className="app-header-right">
+            <div className="app-timer">
+              <div className="timer-label">Elapsed</div>
+              <div className="timer-value">{formatTime(elapsed)}</div>
+            </div>
+            <button
+              className={`app-exit-btn ${showExitConfirm ? 'confirming' : ''}`}
+              onClick={handleExit}
+              onMouseLeave={() => setShowExitConfirm(false)}
+            >
+              {showExitConfirm ? 'Are you sure?' : 'Exit'}
+            </button>
+          </div>
         </header>
 
         {/* Three-panel game area */}
@@ -227,7 +279,7 @@ const GameBoard: React.FC = () => {
         {/* Footer: Progress Indicators */}
         <div className="progress-indicators">
           <div className="progress-item">
-            <div className="progress-label">Confidence Score</div>
+            <div className="progress-label">Trellix Wise Confidence</div>
             <div className="progress-value confidence">{state.confidenceScore}%</div>
           </div>
           <div className="progress-item">
